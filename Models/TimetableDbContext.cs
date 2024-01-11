@@ -9,37 +9,37 @@ namespace Web_API_for_scheduling.models
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AudienceType>().HasKey(i => i.TypeID);
-            modelBuilder.Entity<AudienceType>().HasMany(i => i.Rooms).WithOne().HasForeignKey(i => i.AudienceID);
+            modelBuilder.Entity<AudienceType>().HasKey(i => i.ID);
+            modelBuilder.Entity<AudienceType>().HasMany(i => i.Rooms).WithOne(i => i.AudienceType).HasForeignKey(i => i.AudienceTypeID).HasPrincipalKey(i => i.ID);
 
-            modelBuilder.Entity<Audience>().HasKey(i => i.AudienceID);
-            modelBuilder.Entity<Audience>().HasMany(i => i.Pairs).WithOne().HasForeignKey(i => i.AudienceID);
+            modelBuilder.Entity<Audience>().HasKey(i => i.ID);
+            modelBuilder.Entity<Audience>().HasMany(i => i.Pairs).WithOne(i => i.Audience).HasForeignKey(i => i.AudienceID).HasPrincipalKey(i => i.ID);
 
-            modelBuilder.Entity<Group>().HasKey(i => i.GroupID);
-            modelBuilder.Entity<Group>().HasMany(i => i.Pairs).WithOne().HasForeignKey(i => i.GroupID);
-            
-            modelBuilder.Entity<Teacher>().HasKey(i => i.TeacherID);
-            modelBuilder.Entity<Teacher>().HasMany(i => i.Pairs).WithOne().HasForeignKey(i => i.TeacherID);
+            modelBuilder.Entity<Group>().HasKey(i => i.ID);
+            modelBuilder.Entity<Group>().HasMany(i => i.Pairs).WithOne(i => i.Group).HasForeignKey(i => i.GroupID).HasPrincipalKey(i => i.ID);
 
-            modelBuilder.Entity<Subject>().HasKey(i => i.SubjectID);
-            modelBuilder.Entity<Subject>().HasMany(i => i.Pairs).WithOne().HasForeignKey(i => i.SubjectID);
+            modelBuilder.Entity<Teacher>().HasKey(i => i.ID);
+            modelBuilder.Entity<Teacher>().HasMany(i => i.Pairs).WithOne(i => i.Teacher).HasForeignKey(i => i.TeacherID).HasPrincipalKey(i => i.ID);
 
-            modelBuilder.Entity<Semester>().HasKey(i => i.SemesterID);
-            modelBuilder.Entity<Semester>().HasMany(i => i.Weeks).WithOne().HasForeignKey(i => i.SemesterID);
+            modelBuilder.Entity<Subject>().HasKey(i => i.ID);
+            modelBuilder.Entity<Subject>().HasMany(i => i.Pairs).WithOne(i => i.Subject).HasForeignKey(i => i.SubjectID).HasPrincipalKey(i => i.ID);
 
-            modelBuilder.Entity<Week>().HasKey(i => i.WeekID);
-            modelBuilder.Entity<Week>().HasMany(i => i.Days).WithOne().HasForeignKey(i => i.WeekID);
+            modelBuilder.Entity<Semester>().HasKey(i => i.ID);
+            modelBuilder.Entity<Semester>().HasMany(i => i.Weeks).WithOne(i => i.Semester).HasForeignKey(i => i.SemesterID).HasPrincipalKey(i => i.ID);
+
+            modelBuilder.Entity<Week>().HasKey(i => i.ID);
+            modelBuilder.Entity<Week>().HasMany(i => i.Days).WithOne(i => i.Week).HasForeignKey(i => i.WeekID).HasPrincipalKey(i => i.ID);
 
             modelBuilder.Entity<Pair>().HasKey(i => i.PairID);
-            modelBuilder.Entity<Pair>().HasMany(i => i.Days).WithOne().HasForeignKey(i => i.FirstPairID);
-            modelBuilder.Entity<Pair>().HasMany(i => i.Days1).WithOne().HasForeignKey(i => i.SecondPairID);
-            modelBuilder.Entity<Pair>().HasMany(i => i.Days2).WithOne().HasForeignKey(i => i.ThirdPairID);
-            modelBuilder.Entity<Pair>().HasMany(i => i.Days3).WithOne().HasForeignKey(i => i.FourthPairID);
-            modelBuilder.Entity<Pair>().HasMany(i => i.Days4).WithOne().HasForeignKey(i => i.FifthPairID);
-            modelBuilder.Entity<Pair>().HasMany(i => i.Days5).WithOne().HasForeignKey(i => i.SixthPairID);
-            modelBuilder.Entity<Pair>().HasMany(i => i.Days6).WithOne().HasForeignKey(i => i.SeventhPairID);
+            modelBuilder.Entity<Pair>().HasMany(i => i.Days).WithOne(i => i.Pair1).HasForeignKey(i => i.FirstPairID).HasPrincipalKey(i => i.PairID);
+            modelBuilder.Entity<Pair>().HasMany(i => i.Days1).WithOne(i => i.Pair2).HasForeignKey(i => i.SecondPairID).HasPrincipalKey(i => i.PairID);
+            modelBuilder.Entity<Pair>().HasMany(i => i.Days2).WithOne(i => i.Pair3).HasForeignKey(i => i.ThirdPairID).HasPrincipalKey(i => i.PairID);
+            modelBuilder.Entity<Pair>().HasMany(i => i.Days3).WithOne(i => i.Pair4).HasForeignKey(i => i.FourthPairID).HasPrincipalKey(i => i.PairID);
+            modelBuilder.Entity<Pair>().HasMany(i => i.Days4).WithOne(i => i.Pair5).HasForeignKey(i => i.FifthPairID).HasPrincipalKey(i => i.PairID);
+            modelBuilder.Entity<Pair>().HasMany(i => i.Days5).WithOne(i => i.Pair6).HasForeignKey(i => i.SixthPairID).HasPrincipalKey(i => i.PairID);
+            modelBuilder.Entity<Pair>().HasMany(i => i.Days6).WithOne(i => i.Pair7).HasForeignKey(i => i.SeventhPairID).HasPrincipalKey(i => i.PairID);
 
-            modelBuilder.Entity<Day>().HasKey(i => i.DayID);
+            modelBuilder.Entity<Day>().HasKey(i => i.ID);
             modelBuilder.Entity<Users>().HasKey(i => i.UserID);
         }
         public virtual DbSet<Day> Day { get; set; }

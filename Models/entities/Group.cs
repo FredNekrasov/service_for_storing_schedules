@@ -9,7 +9,7 @@ namespace Web_API_for_scheduling.Models.entities
             Pairs = new HashSet<Pair>();
         }
         [Key]
-        public Guid GroupID { get; set; }
+        public Guid ID { get; set; }
         public string GroupNumber { get; set; } = string.Empty;
         public string ShortNumber { get; set; } = string.Empty;
         public int? StudentNumber { get; set; }

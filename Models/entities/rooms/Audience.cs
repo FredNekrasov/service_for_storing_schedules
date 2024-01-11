@@ -10,7 +10,7 @@ namespace Web_API_for_scheduling.Models.entities.rooms
             Pairs = new HashSet<Pair>();
         }
         [Key]
-        public Guid AudienceID { get; set; }
+        public Guid ID { get; set; }
         [ForeignKey("AudienceType")]
         public Guid? AudienceTypeID { get; set; }
         public int? SeatsNumber { get; set; }

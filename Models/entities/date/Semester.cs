@@ -9,7 +9,7 @@ namespace Web_API_for_scheduling.Models.entities.date
             Weeks = new HashSet<Week>();
         }
         [Key]
-        public Guid SemesterID { get; set; }
+        public Guid ID { get; set; }
         public int? Year { get; set; }
         public bool? IsEven { get; set; }
         public virtual ICollection<Week> Weeks { get; set; }

@@ -35,7 +35,7 @@ namespace Web_API_for_scheduling.Models.entities
         public virtual ICollection<Day> Days5 { get; set; }
         public virtual ICollection<Day> Days6 { get; set; }
         public virtual Group Group { get; set; }
-        public virtual Audience Room { get; set; }
+        public virtual Audience Audience { get; set; }
         public virtual Subject Subject { get; set; }
         public virtual Teacher Teacher { get; set; }
     }
