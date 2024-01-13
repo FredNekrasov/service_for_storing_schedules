@@ -12,8 +12,8 @@ using Web_API_for_scheduling.models;
 namespace Web_API_for_scheduling.Migrations
 {
     [DbContext(typeof(TimetableDbContext))]
-    [Migration("20240111092810_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240113075943_InitialTEP")]
+    partial class InitialTEP
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

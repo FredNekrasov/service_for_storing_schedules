@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Web_API_for_scheduling.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialTEP : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -229,109 +228,57 @@ namespace Web_API_for_scheduling.Migrations
                         principalColumn: "ID");
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Audience_AudienceTypeID",
-                table: "Audience",
-                column: "AudienceTypeID");
+            migrationBuilder.CreateIndex(name: "IX_Audience_AudienceTypeID", table: "Audience", column: "AudienceTypeID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Day_FifthPairID",
-                table: "Day",
-                column: "FifthPairID");
+            migrationBuilder.CreateIndex(name: "IX_Day_FifthPairID", table: "Day", column: "FifthPairID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Day_FirstPairID",
-                table: "Day",
-                column: "FirstPairID");
+            migrationBuilder.CreateIndex(name: "IX_Day_FirstPairID", table: "Day", column: "FirstPairID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Day_FourthPairID",
-                table: "Day",
-                column: "FourthPairID");
+            migrationBuilder.CreateIndex(name: "IX_Day_FourthPairID", table: "Day", column: "FourthPairID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Day_SecondPairID",
-                table: "Day",
-                column: "SecondPairID");
+            migrationBuilder.CreateIndex(name: "IX_Day_SecondPairID", table: "Day", column: "SecondPairID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Day_SeventhPairID",
-                table: "Day",
-                column: "SeventhPairID");
+            migrationBuilder.CreateIndex(name: "IX_Day_SeventhPairID", table: "Day", column: "SeventhPairID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Day_SixthPairID",
-                table: "Day",
-                column: "SixthPairID");
+            migrationBuilder.CreateIndex(name: "IX_Day_SixthPairID", table: "Day", column: "SixthPairID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Day_ThirdPairID",
-                table: "Day",
-                column: "ThirdPairID");
+            migrationBuilder.CreateIndex(name: "IX_Day_ThirdPairID", table: "Day", column: "ThirdPairID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Day_WeekID",
-                table: "Day",
-                column: "WeekID");
+            migrationBuilder.CreateIndex(name: "IX_Day_WeekID", table: "Day", column: "WeekID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Pair_AudienceID",
-                table: "Pair",
-                column: "AudienceID");
+            migrationBuilder.CreateIndex(name: "IX_Pair_AudienceID", table: "Pair", column: "AudienceID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Pair_GroupID",
-                table: "Pair",
-                column: "GroupID");
+            migrationBuilder.CreateIndex(name: "IX_Pair_GroupID", table: "Pair", column: "GroupID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Pair_SubjectID",
-                table: "Pair",
-                column: "SubjectID");
+            migrationBuilder.CreateIndex(name: "IX_Pair_SubjectID", table: "Pair", column: "SubjectID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Pair_TeacherID",
-                table: "Pair",
-                column: "TeacherID");
+            migrationBuilder.CreateIndex(name: "IX_Pair_TeacherID", table: "Pair", column: "TeacherID");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Week_SemesterID",
-                table: "Week",
-                column: "SemesterID");
+            migrationBuilder.CreateIndex(name: "IX_Week_SemesterID", table: "Week", column: "SemesterID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Day");
+            migrationBuilder.DropTable(name: "Day");
 
-            migrationBuilder.DropTable(
-                name: "Users");
+            migrationBuilder.DropTable(name: "Users");
 
-            migrationBuilder.DropTable(
-                name: "Pair");
+            migrationBuilder.DropTable(name: "Pair");
 
-            migrationBuilder.DropTable(
-                name: "Week");
+            migrationBuilder.DropTable(name: "Week");
 
-            migrationBuilder.DropTable(
-                name: "Audience");
+            migrationBuilder.DropTable(name: "Audience");
 
-            migrationBuilder.DropTable(
-                name: "Group");
+            migrationBuilder.DropTable(name: "Group");
 
-            migrationBuilder.DropTable(
-                name: "Subject");
+            migrationBuilder.DropTable(name: "Subject");
 
-            migrationBuilder.DropTable(
-                name: "Teacher");
+            migrationBuilder.DropTable(name: "Teacher");
 
-            migrationBuilder.DropTable(
-                name: "Semester");
+            migrationBuilder.DropTable(name: "Semester");
 
-            migrationBuilder.DropTable(
-                name: "AudienceType");
+            migrationBuilder.DropTable(name: "AudienceType");
         }
     }
 }

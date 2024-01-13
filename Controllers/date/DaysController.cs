@@ -1,76 +1,61 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Web_API_for_scheduling.Models.dto.date;
 using Web_API_for_scheduling.Models.entities.date;
-using Web_API_for_scheduling.models;
+using Web_API_for_scheduling.Models.repositories;
 
 namespace Web_API_for_scheduling.Controllers.date
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DaysController(TimetableDbContext context) : ControllerBase
+    public class DaysController(IRepository<Day> repository, IMapper mapper) : ControllerBase, IController<DayDto>
     {
-        private readonly TimetableDbContext _context = context;
-
-        // GET: api/Days
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Day>>> GetDay() => await _context.Day.ToListAsync();
-
-        // GET: api/Days/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Day>> GetDay(Guid id)
-        {
-            var day = await _context.Day.FindAsync(id);
-
-            if (day == null) return NotFound();
-            
-            return day;
-        }
-
-        // PUT: api/Days/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDay(Guid id, Day day)
-        {
-            if (id != day.ID) return BadRequest();
-            
-            _context.Entry(day).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DayExists(id)) return NotFound(); else throw;
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Days
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Day>> PostDay(Day day)
-        {
-            _context.Day.Add(day);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetDay", new { id = day.ID }, day);
-        }
-
-        // DELETE: api/Days/5
+        private readonly IRepository<Day> _repository = repository;
+        private readonly IMapper _mapper = mapper;
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDay(Guid id)
+        public IActionResult DeleteRecord(Guid id)
         {
-            var day = await _context.Day.FindAsync(id);
-            if (day == null) return NotFound();
-
-            _context.Day.Remove(day);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            bool result = _repository.DeleteAsync(id).Result;
+            if (!result) return NotFound();
+            return Ok();
         }
-
-        private bool DayExists(Guid id) => _context.Day.Any(e => e.ID == id);
+        [HttpGet]
+        public ActionResult<IEnumerable<DayDto>> GetList()
+        {
+            var result = _repository.GetListAsync().Result;
+            if (result == null) return NoContent();
+            List<DayDto> list = _mapper.Map<List<DayDto>>(result);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            return list;
+        }
+        [HttpGet("{id}")]
+        public ActionResult<DayDto> GetRecord(Guid id)
+        {
+            var record = _repository.GetAsync(id).Result;
+            if (record == null) return NotFound();
+            DayDto dto = _mapper.Map<DayDto>(record);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            return dto;
+        }
+        [HttpPost]
+        public IActionResult PostRecord(DayDto dto)
+        {
+            Day record = _mapper.Map<Day>(dto);
+            bool result = _repository.PostData(record).Result;
+            if (!result) return BadRequest();
+            return Ok();
+        }
+        [HttpPut("{id}")]
+        public IActionResult PutRecord(Guid id, DayDto dto)
+        {
+            Day record = _mapper.Map<Day>(dto);
+            bool? result = _repository.PutData(id, record).Result;
+            return result switch
+            {
+                false => BadRequest(),
+                null => NotFound(),
+                true => NoContent(),
+            };
+        }
     }
 }

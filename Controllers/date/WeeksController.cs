@@ -1,76 +1,61 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Web_API_for_scheduling.Models.dto.date;
 using Web_API_for_scheduling.Models.entities.date;
-using Web_API_for_scheduling.models;
+using Web_API_for_scheduling.Models.repositories;
 
 namespace Web_API_for_scheduling.Controllers.date
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WeeksController(TimetableDbContext context) : ControllerBase
+    public class WeeksController(IRepository<Week> repository, IMapper mapper) : ControllerBase, IController<WeekDto>
     {
-        private readonly TimetableDbContext _context = context;
-
-        // GET: api/Weeks
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Week>>> GetWeek() => await _context.Week.ToListAsync();
-
-        // GET: api/Weeks/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Week>> GetWeek(Guid id)
-        {
-            var week = await _context.Week.FindAsync(id);
-
-            if (week == null) return NotFound();
-
-            return week;
-        }
-
-        // PUT: api/Weeks/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutWeek(Guid id, Week week)
-        {
-            if (id != week.ID) return BadRequest();
-
-            _context.Entry(week).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!WeekExists(id)) return NotFound(); else throw;
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Weeks
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Week>> PostWeek(Week week)
-        {
-            _context.Week.Add(week);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetWeek", new { id = week.ID }, week);
-        }
-
-        // DELETE: api/Weeks/5
+        private readonly IRepository<Week> _repository = repository;
+        private readonly IMapper _mapper = mapper;
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteWeek(Guid id)
+        public IActionResult DeleteRecord(Guid id)
         {
-            var week = await _context.Week.FindAsync(id);
-            if (week == null) return NotFound();
-
-            _context.Week.Remove(week);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            bool result = _repository.DeleteAsync(id).Result;
+            if (!result) return NotFound();
+            return Ok();
         }
-
-        private bool WeekExists(Guid id) => _context.Week.Any(e => e.ID == id);
+        [HttpGet]
+        public ActionResult<IEnumerable<WeekDto>> GetList()
+        {
+            var result = _repository.GetListAsync().Result;
+            if (result == null) return NoContent();
+            List<WeekDto> list = _mapper.Map<List<WeekDto>>(result);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            return list;
+        }
+        [HttpGet("{id}")]
+        public ActionResult<WeekDto> GetRecord(Guid id)
+        {
+            var record = _repository.GetAsync(id).Result;
+            if (record == null) return NotFound();
+            WeekDto dto = _mapper.Map<WeekDto>(record);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            return dto;
+        }
+        [HttpPost]
+        public IActionResult PostRecord(WeekDto dto)
+        {
+            Week record = _mapper.Map<Week>(dto);
+            bool result = _repository.PostData(record).Result;
+            if (!result) return BadRequest();
+            return Ok();
+        }
+        [HttpPut("{id}")]
+        public IActionResult PutRecord(Guid id, WeekDto dto)
+        {
+            Week record = _mapper.Map<Week>(dto);
+            bool? result = _repository.PutData(id, record).Result;
+            return result switch
+            {
+                false => BadRequest(),
+                null => NotFound(),
+                true => NoContent(),
+            };
+        }
     }
 }

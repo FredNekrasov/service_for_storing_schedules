@@ -1,9 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Web_API_for_scheduling.Models.entities
+﻿namespace Web_API_for_scheduling.Models.dto
 {
-    [PrimaryKey(nameof(ID))]
-    public class Subject
+    public class SubjectDto
     {
         public Guid ID { get; set; }
         public string SubjectName { get; set; } = string.Empty;
@@ -12,6 +9,5 @@ namespace Web_API_for_scheduling.Models.entities
         public int? TotalHours { get; set; }
         public int? ConsultationHours { get; set; }
         public string TypeOfCertification { get; set; } = string.Empty;
-        public virtual ICollection<Pair> Pairs { get; set; }
     }
 }

@@ -1,74 +1,61 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Web_API_for_scheduling.Models.dto.rooms;
 using Web_API_for_scheduling.Models.entities.rooms;
-using Web_API_for_scheduling.models;
+using Web_API_for_scheduling.Models.repositories;
 
 namespace Web_API_for_scheduling.Controllers.rooms
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AudiencesController(TimetableDbContext context) : ControllerBase
+    public class AudiencesController(IRepository<Audience> repository, IMapper mapper) : ControllerBase, IController<AudienceDto>
     {
-        private readonly TimetableDbContext _context = context;
-
-        // GET: api/Audiences
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Audience>>> GetAudience() => await _context.Audience.ToListAsync();
-
-        // GET: api/Audiences/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Audience>> GetAudience(Guid id)
-        {
-            var audience = await _context.Audience.FindAsync(id);
-            if (audience == null) return NotFound();
-            return audience;
-        }
-
-        // PUT: api/Audiences/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutAudience(Guid id, Audience audience)
-        {
-            if (id != audience.ID) return BadRequest();
-
-            _context.Entry(audience).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!AudienceExists(id)) return NotFound(); else throw;
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Audiences
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Audience>> PostAudience(Audience audience)
-        {
-            _context.Audience.Add(audience);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetAudience", new { id = audience.ID }, audience);
-        }
-
-        // DELETE: api/Audiences/5
+        private readonly IRepository<Audience> _repository = repository;
+        private readonly IMapper _mapper = mapper;
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAudience(Guid id)
+        public IActionResult DeleteRecord(Guid id)
         {
-            var audience = await _context.Audience.FindAsync(id);
-            if (audience == null) return NotFound();
-
-            _context.Audience.Remove(audience);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            bool result = _repository.DeleteAsync(id).Result;
+            if (!result) return NotFound();
+            return Ok();
         }
-
-        private bool AudienceExists(Guid id) => _context.Audience.Any(e => e.ID == id);
+        [HttpGet]
+        public ActionResult<IEnumerable<AudienceDto>> GetList()
+        {
+            var result = _repository.GetListAsync().Result;
+            if (result == null) return NoContent();
+            List<AudienceDto> list = _mapper.Map<List<AudienceDto>>(result);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            return list;
+        }
+        [HttpGet("{id}")]
+        public ActionResult<AudienceDto> GetRecord(Guid id)
+        {
+            var record = _repository.GetAsync(id).Result;
+            if (record == null) return NotFound();
+            AudienceDto dto = _mapper.Map<AudienceDto>(record);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            return dto;
+        }
+        [HttpPost]
+        public IActionResult PostRecord(AudienceDto dto)
+        {
+            Audience record = _mapper.Map<Audience>(dto);
+            bool result = _repository.PostData(record).Result;
+            if (!result) return BadRequest();
+            return Ok();
+        }
+        [HttpPut("{id}")]
+        public IActionResult PutRecord(Guid id, AudienceDto dto)
+        {
+            Audience record = _mapper.Map<Audience>(dto);
+            bool? result = _repository.PutData(id, record).Result;
+            return result switch
+            {
+                false => BadRequest(),
+                null => NotFound(),
+                true => NoContent(),
+            };
+        }
     }
 }

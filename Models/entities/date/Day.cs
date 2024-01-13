@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Web_API_for_scheduling.Models.entities.date
 {
+    [PrimaryKey(nameof(ID))]
     public class Day
     {
-        [Key]
         public Guid ID { get; set; }
         public string DayOfWeek { get; set; } = string.Empty;
         public Guid? WeekID { get; set; }

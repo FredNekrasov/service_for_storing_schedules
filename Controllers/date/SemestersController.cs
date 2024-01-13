@@ -1,76 +1,61 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Web_API_for_scheduling.Models.entities.date;
-using Web_API_for_scheduling.models;
+using Web_API_for_scheduling.Models.dto.date;
+using Web_API_for_scheduling.Models.repositories;
 
 namespace Web_API_for_scheduling.Controllers.date
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SemestersController(TimetableDbContext context) : ControllerBase
+    public class SemestersController(IRepository<Semester> repository, IMapper mapper) : ControllerBase, IController<SemesterDto>
     {
-        private readonly TimetableDbContext _context = context;
-
-        // GET: api/Semesters
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Semester>>> GetSemester() => await _context.Semester.ToListAsync();
-
-        // GET: api/Semesters/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Semester>> GetSemester(Guid id)
-        {
-            var semester = await _context.Semester.FindAsync(id);
-
-            if (semester == null) return NotFound();
-
-            return semester;
-        }
-
-        // PUT: api/Semesters/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutSemester(Guid id, Semester semester)
-        {
-            if (id != semester.ID) return BadRequest();
-            
-            _context.Entry(semester).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!SemesterExists(id)) return NotFound(); else throw;
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Semesters
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Semester>> PostSemester(Semester semester)
-        {
-            _context.Semester.Add(semester);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetSemester", new { id = semester.ID }, semester);
-        }
-
-        // DELETE: api/Semesters/5
+        private readonly IRepository<Semester> _repository = repository;
+        private readonly IMapper _mapper = mapper;
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSemester(Guid id)
+        public IActionResult DeleteRecord(Guid id)
         {
-            var semester = await _context.Semester.FindAsync(id);
-            if (semester == null) return NotFound();
-
-            _context.Semester.Remove(semester);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            bool result = _repository.DeleteAsync(id).Result;
+            if (!result) return NotFound();
+            return Ok();
         }
-
-        private bool SemesterExists(Guid id) => _context.Semester.Any(e => e.ID == id);
+        [HttpGet]
+        public ActionResult<IEnumerable<SemesterDto>> GetList()
+        {
+            var result = _repository.GetListAsync().Result;
+            if (result == null) return NoContent();
+            List<SemesterDto> list = _mapper.Map<List<SemesterDto>>(result);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            return list;
+        }
+        [HttpGet("{id}")]
+        public ActionResult<SemesterDto> GetRecord(Guid id)
+        {
+            var record = _repository.GetAsync(id).Result;
+            if (record == null) return NotFound();
+            SemesterDto dto = _mapper.Map<SemesterDto>(record);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            return dto;
+        }
+        [HttpPost]
+        public IActionResult PostRecord(SemesterDto dto)
+        {
+            Semester record = _mapper.Map<Semester>(dto);
+            bool result = _repository.PostData(record).Result;
+            if(!result) return BadRequest();
+            return Ok();
+        }
+        [HttpPut("{id}")]
+        public IActionResult PutRecord(Guid id, SemesterDto dto)
+        {
+            Semester record = _mapper.Map<Semester>(dto);
+            bool? result = _repository.PutData(id, record).Result;
+            return result switch
+            {
+                false => BadRequest(),
+                null => NotFound(),
+                true => NoContent(),
+            };
+        }
     }
 }
