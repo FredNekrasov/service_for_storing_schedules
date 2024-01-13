@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Web_API_for_scheduling.Models;
 
 namespace Web_API_for_scheduling.Controllers
 {

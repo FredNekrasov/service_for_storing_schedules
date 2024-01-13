@@ -1,18 +1,15 @@
 ﻿using AutoMapper;
-using Humanizer;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using Web_API_for_scheduling.Models.dto;
 using Web_API_for_scheduling.Models.entities;
 using Web_API_for_scheduling.Models.repositories;
-
 namespace Web_API_for_scheduling.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class GroupsController(IRepository<Group> repository, IMapper mapper) : ControllerBase, IController<GroupDto>
+    public class TeachersController(IRepository<Teacher> repository, IMapper mapper) : ControllerBase, IController<TeacherDto>
     {
-        private readonly IRepository<Group> _repository = repository;
+        private readonly IRepository<Teacher> _repository = repository;
         private readonly IMapper _mapper = mapper;
         public IActionResult DeleteRecord(Guid id)
         {
@@ -21,35 +18,35 @@ namespace Web_API_for_scheduling.Controllers
             return Ok();
         }
 
-        public ActionResult<IEnumerable<GroupDto>> GetList()
+        public ActionResult<IEnumerable<TeacherDto>> GetList()
         {
             var result = _repository.GetListAsync().Result;
             if (result == null) return NoContent();
-            List<GroupDto> list = _mapper.Map<List<GroupDto>>(result);
+            List<TeacherDto> list = _mapper.Map<List<TeacherDto>>(result);
             if (!ModelState.IsValid) return BadRequest(ModelState);
             return list;
         }
 
-        public ActionResult<GroupDto> GetRecord(Guid id)
+        public ActionResult<TeacherDto> GetRecord(Guid id)
         {
             var record = _repository.GetAsync(id).Result;
             if (record == null) return NotFound();
-            GroupDto dto = _mapper.Map<GroupDto>(record);
+            TeacherDto dto = _mapper.Map<TeacherDto>(record);
             if (!ModelState.IsValid) return BadRequest(ModelState);
             return dto;
         }
 
-        public IActionResult PostRecord(GroupDto dto)
+        public IActionResult PostRecord(TeacherDto dto)
         {
-            Group record = _mapper.Map<Group>(dto);
+            Teacher record = _mapper.Map<Teacher>(dto);
             bool result = _repository.PostData(record).Result;
             if (!result) return BadRequest();
             return Ok();
         }
 
-        public IActionResult PutRecord(Guid id, GroupDto dto)
+        public IActionResult PutRecord(Guid id, TeacherDto dto)
         {
-            Group record = _mapper.Map<Group>(dto);
+            Teacher record = _mapper.Map<Teacher>(dto);
             bool? result = _repository.PutData(id, record).Result;
             return result switch
             {

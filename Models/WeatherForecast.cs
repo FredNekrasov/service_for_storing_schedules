@@ -1,4 +1,4 @@
-namespace Web_API_for_scheduling
+namespace Web_API_for_scheduling.Models
 {
     public class WeatherForecast
     {
