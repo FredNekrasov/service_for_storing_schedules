@@ -11,13 +11,14 @@ namespace Web_API_for_scheduling.Controllers
     {
         private readonly IRepository<Subject> _repository = repository;
         private readonly IMapper _mapper = mapper;
+        [HttpDelete("{id}")]
         public IActionResult DeleteRecord(Guid id)
         {
             bool result = _repository.DeleteAsync(id).Result;
             if (!result) return NotFound();
             return Ok();
         }
-
+        [HttpGet]
         public ActionResult<IEnumerable<SubjectDto>> GetList()
         {
             var result = _repository.GetListAsync().Result;
@@ -26,7 +27,7 @@ namespace Web_API_for_scheduling.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             return list;
         }
-
+        [HttpGet("{id}")]
         public ActionResult<SubjectDto> GetRecord(Guid id)
         {
             var record = _repository.GetAsync(id).Result;
@@ -35,7 +36,7 @@ namespace Web_API_for_scheduling.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             return dto;
         }
-
+        [HttpPost]
         public IActionResult PostRecord(SubjectDto dto)
         {
             Subject record = _mapper.Map<Subject>(dto);
@@ -43,7 +44,7 @@ namespace Web_API_for_scheduling.Controllers
             if (!result) return BadRequest();
             return Ok();
         }
-
+        [HttpPut("{id}")]
         public IActionResult PutRecord(Guid id, SubjectDto dto)
         {
             Subject record = _mapper.Map<Subject>(dto);
