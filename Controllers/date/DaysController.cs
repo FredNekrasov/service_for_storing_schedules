@@ -1,55 +1,63 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Web_API_for_scheduling.Models.dto.date;
 using Web_API_for_scheduling.Models.entities.date;
+using Web_API_for_scheduling.Models.mappers.day;
 using Web_API_for_scheduling.Models.repositories;
 
 namespace Web_API_for_scheduling.Controllers.date
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DaysController(IRepository<Day> repository, IMapper mapper) : ControllerBase, IController<DayDto>
+    public class DaysController(IRepository<Day> repository, IMapDay mapper) : ControllerBase, IController<DayDto>
     {
         private readonly IRepository<Day> _repository = repository;
-        private readonly IMapper _mapper = mapper;
+        private readonly IMapDay _mapper = mapper;
+        private DayDto? dto;
+        private readonly List<DayDto> list = [];
         [HttpDelete("{id}")]
-        public IActionResult DeleteRecord(Guid id)
+        public async Task<IActionResult> DeleteRecordAsync(Guid id)
         {
-            bool result = _repository.DeleteAsync(id).Result;
+            bool result = await _repository.DeleteAsync(id);
             if (!result) return NotFound();
             return Ok();
         }
         [HttpGet]
-        public ActionResult<IEnumerable<DayDto>> GetList()
+        public async Task<ActionResult<IEnumerable<DayDto>>> GetListAsync()
         {
-            var result = _repository.GetListAsync().Result;
+            var result = await _repository.GetListAsync();
             if (result == null) return NoContent();
-            List<DayDto> list = _mapper.Map<List<DayDto>>(result);
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            foreach (var item in result)
+            {
+                dto = await _mapper.ToDtoAsync(item);
+                list.Add(dto!);
+            }
             return list;
         }
         [HttpGet("{id}")]
-        public ActionResult<DayDto> GetRecord(Guid id)
+        public async Task<ActionResult<DayDto>> GetRecordAsync(Guid id)
         {
-            var record = _repository.GetAsync(id).Result;
+            var record = await _repository.GetAsync(id);
             if (record == null) return NotFound();
-            DayDto dto = _mapper.Map<DayDto>(record);
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            dto = await _mapper.ToDtoAsync(record);
+            if (dto == null) return NotFound();
             return dto;
         }
         [HttpPost]
-        public IActionResult PostRecord(DayDto dto)
+        public async Task<IActionResult> PostRecordAsync(DayDto dto)
         {
-            Day record = _mapper.Map<Day>(dto);
-            bool result = _repository.PostData(record).Result;
-            if (!result) return BadRequest();
+            bool result = _repository.EntityExists(dto.ID);
+            if (result) return BadRequest();
+            Day? record = _mapper.ToDay(dto);
+            if (record == null) return BadRequest();
+            await _repository.PostData(record);
             return Ok();
         }
         [HttpPut("{id}")]
-        public IActionResult PutRecord(Guid id, DayDto dto)
+        public async Task<IActionResult> PutRecordAsync(Guid id, DayDto dto)
         {
-            Day record = _mapper.Map<Day>(dto);
-            bool? result = _repository.PutData(id, record).Result;
+            Day? record = _mapper.ToDay(dto);
+            if (record == null) return BadRequest();
+            bool? result = await _repository.PutData(id, record);
             return result switch
             {
                 false => BadRequest(),

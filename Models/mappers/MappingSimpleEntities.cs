@@ -8,18 +8,15 @@ using Web_API_for_scheduling.Models.entities.rooms;
 
 namespace Web_API_for_scheduling.Models.mappers
 {
-    public class MappingEntities : Profile
+    public class MappingSimpleEntities : Profile
     {
-        public MappingEntities()
+        public MappingSimpleEntities()
         {
             CreateMap<Semester, SemesterDto>();
-            CreateMap<Week, WeekDto>();
             CreateMap<AudienceType, AudienceTypeDto>();
             CreateMap<Group, GroupDto>();
             CreateMap<Subject, SubjectDto>();
             CreateMap<Teacher, TeacherDto>();
-            CreateMap<Pair, PairDto>();
-            CreateMap<Day, DayDto>();
 
             CreateMap<SemesterDto, Semester>();
             CreateMap<AudienceTypeDto, AudienceType>();

@@ -12,43 +12,40 @@ namespace Web_API_for_scheduling.Controllers
         private readonly IRepository<Teacher> _repository = repository;
         private readonly IMapper _mapper = mapper;
         [HttpDelete("{id}")]
-        public IActionResult DeleteRecord(Guid id)
+        public async Task<IActionResult> DeleteRecordAsync(Guid id)
         {
-            bool result = _repository.DeleteAsync(id).Result;
+            bool result = await _repository.DeleteAsync(id);
             if (!result) return NotFound();
             return Ok();
         }
         [HttpGet]
-        public ActionResult<IEnumerable<TeacherDto>> GetList()
+        public async Task<ActionResult<IEnumerable<TeacherDto>>> GetListAsync()
         {
-            var result = _repository.GetListAsync().Result;
+            var result = await _repository.GetListAsync();
             if (result == null) return NoContent();
             List<TeacherDto> list = _mapper.Map<List<TeacherDto>>(result);
-            if (!ModelState.IsValid) return BadRequest(ModelState);
             return list;
         }
         [HttpGet("{id}")]
-        public ActionResult<TeacherDto> GetRecord(Guid id)
+        public async Task<ActionResult<TeacherDto>> GetRecordAsync(Guid id)
         {
-            var record = _repository.GetAsync(id).Result;
+            var record = await _repository.GetAsync(id);
             if (record == null) return NotFound();
             TeacherDto dto = _mapper.Map<TeacherDto>(record);
-            if (!ModelState.IsValid) return BadRequest(ModelState);
             return dto;
         }
         [HttpPost]
-        public IActionResult PostRecord(TeacherDto dto)
+        public async Task<IActionResult> PostRecordAsync(TeacherDto dto)
         {
             Teacher record = _mapper.Map<Teacher>(dto);
-            bool result = _repository.PostData(record).Result;
-            if (!result) return BadRequest();
+            await _repository.PostData(record);
             return Ok();
         }
         [HttpPut("{id}")]
-        public IActionResult PutRecord(Guid id, TeacherDto dto)
+        public async Task<IActionResult> PutRecordAsync(Guid id, TeacherDto dto)
         {
             Teacher record = _mapper.Map<Teacher>(dto);
-            bool? result = _repository.PutData(id, record).Result;
+            bool? result = await _repository.PutData(id, record);
             return result switch
             {
                 false => BadRequest(),

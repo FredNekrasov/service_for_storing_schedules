@@ -1,55 +1,63 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Web_API_for_scheduling.Models.dto.rooms;
 using Web_API_for_scheduling.Models.entities.rooms;
+using Web_API_for_scheduling.Models.mappers.audience;
 using Web_API_for_scheduling.Models.repositories;
 
 namespace Web_API_for_scheduling.Controllers.rooms
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AudiencesController(IRepository<Audience> repository, IMapper mapper) : ControllerBase, IController<AudienceDto>
+    public class AudiencesController(IRepository<Audience> repository, IMapAudience mapper) : ControllerBase, IController<AudienceDto>
     {
         private readonly IRepository<Audience> _repository = repository;
-        private readonly IMapper _mapper = mapper;
+        private readonly IMapAudience _mapper = mapper;
+        private AudienceDto? dto;
+        private readonly List<AudienceDto> list = [];
         [HttpDelete("{id}")]
-        public IActionResult DeleteRecord(Guid id)
+        public async Task<IActionResult> DeleteRecordAsync(Guid id)
         {
-            bool result = _repository.DeleteAsync(id).Result;
+            bool result = await _repository.DeleteAsync(id);
             if (!result) return NotFound();
             return Ok();
         }
         [HttpGet]
-        public ActionResult<IEnumerable<AudienceDto>> GetList()
+        public async Task<ActionResult<IEnumerable<AudienceDto>>> GetListAsync()
         {
-            var result = _repository.GetListAsync().Result;
+            var result = await _repository.GetListAsync();
             if (result == null) return NoContent();
-            List<AudienceDto> list = _mapper.Map<List<AudienceDto>>(result);
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            foreach (var item in result)
+            {
+                dto = await _mapper.ToDtoAsync(item);
+                list.Add(dto!);
+            }
             return list;
         }
         [HttpGet("{id}")]
-        public ActionResult<AudienceDto> GetRecord(Guid id)
+        public async Task<ActionResult<AudienceDto>> GetRecordAsync(Guid id)
         {
-            var record = _repository.GetAsync(id).Result;
+            var record = await _repository.GetAsync(id);
             if (record == null) return NotFound();
-            AudienceDto dto = _mapper.Map<AudienceDto>(record);
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            dto = await _mapper.ToDtoAsync(record);
+            if (dto == null) return NotFound();
             return dto;
         }
         [HttpPost]
-        public IActionResult PostRecord(AudienceDto dto)
+        public async Task<IActionResult> PostRecordAsync(AudienceDto dto)
         {
-            Audience record = _mapper.Map<Audience>(dto);
-            bool result = _repository.PostData(record).Result;
-            if (!result) return BadRequest();
+            bool result = _repository.EntityExists(dto.ID);
+            if (result) return BadRequest();
+            Audience? record = await _mapper.ToAudienceAsync(dto);
+            if (record == null) return BadRequest();
+            await _repository.PostData(record);
             return Ok();
         }
         [HttpPut("{id}")]
-        public IActionResult PutRecord(Guid id, AudienceDto dto)
+        public async Task<IActionResult> PutRecordAsync(Guid id, AudienceDto dto)
         {
-            Audience record = _mapper.Map<Audience>(dto);
-            bool? result = _repository.PutData(id, record).Result;
+            Audience? record = await _mapper.ToAudienceAsync(dto);
+            if (record == null) return BadRequest();
+            bool? result = await _repository.PutData(id, record);
             return result switch
             {
                 false => BadRequest(),

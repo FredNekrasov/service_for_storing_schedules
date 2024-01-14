@@ -4,10 +4,10 @@ namespace Web_API_for_scheduling.Controllers
 {
     public interface IController<T>
     {
-        ActionResult<IEnumerable<T>> GetList();
-        ActionResult<T> GetRecord(Guid id);
-        IActionResult PutRecord(Guid id, T dto);
-        IActionResult PostRecord(T dto);
-        IActionResult DeleteRecord(Guid id);
+        Task<ActionResult<IEnumerable<T>>> GetListAsync();
+        Task<ActionResult<T>> GetRecordAsync(Guid id);
+        Task<IActionResult> PutRecordAsync(Guid id, T dto);
+        Task<IActionResult> PostRecordAsync(T dto);
+        Task<IActionResult> DeleteRecordAsync(Guid id);
     }
 }

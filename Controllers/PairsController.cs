@@ -1,55 +1,63 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Web_API_for_scheduling.Models.dto;
 using Web_API_for_scheduling.Models.entities;
+using Web_API_for_scheduling.Models.mappers.pair;
 using Web_API_for_scheduling.Models.repositories;
 
 namespace Web_API_for_scheduling.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PairsController(IRepository<Pair> repository, IMapper mapper) : ControllerBase, IController<PairDto>
+    public class PairsController(IRepository<Pair> repository, IMapPair mapper) : ControllerBase, IController<PairDto>
     {
         private readonly IRepository<Pair> _repository = repository;
-        private readonly IMapper _mapper = mapper;
+        private readonly IMapPair _mapper = mapper;
+        private PairDto? dto;
+        private readonly List<PairDto> list = [];
         [HttpDelete("{id}")]
-        public IActionResult DeleteRecord(Guid id)
+        public async Task<IActionResult> DeleteRecordAsync(Guid id)
         {
-            bool result = _repository.DeleteAsync(id).Result;
+            bool result = await _repository.DeleteAsync(id);
             if (!result) return NotFound();
             return Ok();
         }
         [HttpGet]
-        public ActionResult<IEnumerable<PairDto>> GetList()
+        public async Task<ActionResult<IEnumerable<PairDto>>> GetListAsync()
         {
-            var result = _repository.GetListAsync().Result;
+            var result = await _repository.GetListAsync();
             if (result == null) return NoContent();
-            List<PairDto> list = _mapper.Map<List<PairDto>>(result);
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            foreach (var item in result)
+            {
+                dto = await _mapper.ToDtoAsync(item);
+                list.Add(dto!);
+            }
             return list;
         }
         [HttpGet("{id}")]
-        public ActionResult<PairDto> GetRecord(Guid id)
+        public async Task<ActionResult<PairDto>> GetRecordAsync(Guid id)
         {
-            var record = _repository.GetAsync(id).Result;
+            var record = await _repository.GetAsync(id);
             if (record == null) return NotFound();
-            PairDto dto = _mapper.Map<PairDto>(record);
-            if (!ModelState.IsValid) return BadRequest(ModelState);
+            dto = await _mapper.ToDtoAsync(record);
+            if (dto == null) return NotFound();
             return dto;
         }
         [HttpPost]
-        public IActionResult PostRecord(PairDto dto)
+        public async Task<IActionResult> PostRecordAsync(PairDto dto)
         {
-            Pair record = _mapper.Map<Pair>(dto);
-            bool result = _repository.PostData(record).Result;
-            if (!result) return BadRequest();
+            bool result = _repository.EntityExists(dto.PairID);
+            if (result) return BadRequest();
+            Pair? record = _mapper.ToPair(dto);
+            if (record == null) return BadRequest();
+            await _repository.PostData(record);
             return Ok();
         }
         [HttpPut("{id}")]
-        public IActionResult PutRecord(Guid id, PairDto dto)
+        public async Task<IActionResult> PutRecordAsync(Guid id, PairDto dto)
         {
-            Pair record = _mapper.Map<Pair>(dto);
-            bool? result = _repository.PutData(id, record).Result;
+            Pair? record = _mapper.ToPair(dto);
+            if (record == null) return BadRequest();
+            bool? result = await _repository.PutData(id, record);
             return result switch
             {
                 false => BadRequest(),
