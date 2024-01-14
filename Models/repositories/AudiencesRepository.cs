@@ -7,10 +7,11 @@ namespace Web_API_for_scheduling.Models.repositories
     public class AudiencesRepository(TimetableDbContext context) : IRepository<Audience>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(Guid id)
         {
             var audience = await _context.Audience.FindAsync(id);
             if (audience == null) return false;
+            if (await _context.Pair.FirstAsync(i => i.AudienceID == id) != null) return null;
             _context.Audience.Remove(audience);
             await _context.SaveChangesAsync();
             return true;

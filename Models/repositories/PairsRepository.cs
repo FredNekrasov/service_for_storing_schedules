@@ -7,11 +7,17 @@ namespace Web_API_for_scheduling.Models.repositories
     public class PairsRepository(TimetableDbContext context) : IRepository<Pair>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(Guid id)
         {
             var pair = await _context.Pair.FindAsync(id);
             if (pair == null) return false;
-
+            if (await _context.Day.FirstAsync(i => i.FirstPairID == id) != null) return null;
+            if (await _context.Day.FirstAsync(i => i.SecondPairID == id) != null) return null;
+            if (await _context.Day.FirstAsync(i => i.ThirdPairID == id) != null) return null;
+            if (await _context.Day.FirstAsync(i => i.FourthPairID == id) != null) return null;
+            if (await _context.Day.FirstAsync(i => i.FifthPairID == id) != null) return null;
+            if (await _context.Day.FirstAsync(i => i.SixthPairID == id) != null) return null;
+            if (await _context.Day.FirstAsync(i => i.SeventhPairID == id) != null) return null;
             _context.Pair.Remove(pair);
             await _context.SaveChangesAsync();
             return true;

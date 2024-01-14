@@ -7,11 +7,10 @@ namespace Web_API_for_scheduling.Models.repositories
     public class DaysRepository(TimetableDbContext context) : IRepository<Day>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(Guid id)
         {
             var day = await _context.Day.FindAsync(id);
             if (day == null) return false;
-
             _context.Day.Remove(day);
             await _context.SaveChangesAsync();
             return true;

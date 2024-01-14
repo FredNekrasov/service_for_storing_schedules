@@ -51,7 +51,7 @@ namespace Web_API_for_scheduling.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsers(Guid id)
         {
-            bool result = await _repository.DeleteAsync(id);
+            bool? result = await _repository.DeleteAsync(id);
             if (result == false) return BadRequest();
             return Ok();
         }

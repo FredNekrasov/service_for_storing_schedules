@@ -7,11 +7,11 @@ namespace Web_API_for_scheduling.Models.repositories
     public class GroupsRepository(TimetableDbContext context) : IRepository<Group>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(Guid id)
         {
             var squad = await _context.Group.FindAsync(id);
             if (squad == null) return false;
-
+            if (await _context.Pair.FirstAsync(i => i.GroupID == id) != null) return null;
             _context.Group.Remove(squad);
             await _context.SaveChangesAsync();
             return true;

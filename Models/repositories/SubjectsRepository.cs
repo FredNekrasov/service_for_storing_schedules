@@ -7,11 +7,11 @@ namespace Web_API_for_scheduling.Models.repositories
     public class SubjectsRepository(TimetableDbContext context) : IRepository<Subject>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(Guid id)
         {
             var subject = await _context.Subject.FindAsync(id);
             if (subject == null) return false;
-
+            if (await _context.Pair.FirstAsync(i => i.SubjectID == id) != null) return null;
             _context.Subject.Remove(subject);
             await _context.SaveChangesAsync();
             return true;

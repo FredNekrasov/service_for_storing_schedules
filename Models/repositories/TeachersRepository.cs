@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NuGet.DependencyResolver;
 using Web_API_for_scheduling.models;
 using Web_API_for_scheduling.Models.entities;
 
@@ -8,11 +7,11 @@ namespace Web_API_for_scheduling.Models.repositories
     public class TeachersRepository(TimetableDbContext context) : IRepository<Teacher>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(Guid id)
         {
             var teacher = await _context.Teacher.FindAsync(id);
             if (teacher == null) return false;
-
+            if (await _context.Pair.FirstAsync(i => i.TeacherID == id) != null) return null;
             _context.Teacher.Remove(teacher);
             await _context.SaveChangesAsync();
             return true;

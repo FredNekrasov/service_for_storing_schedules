@@ -17,8 +17,8 @@ namespace Web_API_for_scheduling.Controllers.date
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRecordAsync(Guid id)
         {
-            bool result = await _repository.DeleteAsync(id);
-            if (!result) return NotFound();
+            bool? result = await _repository.DeleteAsync(id);
+            if (result == false) return NotFound();
             return Ok();
         }
         [HttpGet]

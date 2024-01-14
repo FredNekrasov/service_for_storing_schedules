@@ -15,9 +15,13 @@ namespace Web_API_for_scheduling.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRecordAsync(Guid id)
         {
-            bool result = await _repository.DeleteAsync(id);
-            if (!result) return NotFound();
-            return Ok();
+            bool? result = await _repository.DeleteAsync(id);
+            return result switch
+            {
+                false => NotFound(),
+                null => BadRequest("this record is used as a foreign key in other entities"),
+                true => Ok()
+            };
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GroupDto>>> GetListAsync()

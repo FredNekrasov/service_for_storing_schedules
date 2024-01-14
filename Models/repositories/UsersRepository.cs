@@ -7,7 +7,7 @@ namespace Web_API_for_scheduling.Models.repositories
     public class UsersRepository(TimetableDbContext context) : IRepository<Users>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(Guid id)
         {
             var users = await _context.Users.FindAsync(id);
             if (users == null) return false;
