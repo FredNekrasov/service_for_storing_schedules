@@ -2,7 +2,7 @@
 using Web_API_for_scheduling.models;
 using Web_API_for_scheduling.Models.entities.rooms;
 
-namespace Web_API_for_scheduling.Models.repositories
+namespace Web_API_for_scheduling.Models.repositories.implementation.room
 {
     public class AudienceTypesRepository(TimetableDbContext context) : IRepository<AudienceType>
     {

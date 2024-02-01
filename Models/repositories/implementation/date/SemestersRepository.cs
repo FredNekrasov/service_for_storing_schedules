@@ -2,7 +2,7 @@
 using Web_API_for_scheduling.models;
 using Web_API_for_scheduling.Models.entities.date;
 
-namespace Web_API_for_scheduling.Models.repositories;
+namespace Web_API_for_scheduling.Models.repositories.implementation.date;
 public class SemestersRepository(TimetableDbContext context) : IRepository<Semester>
 {
     private readonly TimetableDbContext _context = context;

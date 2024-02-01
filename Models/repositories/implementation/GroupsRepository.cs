@@ -2,35 +2,33 @@
 using Web_API_for_scheduling.models;
 using Web_API_for_scheduling.Models.entities;
 
-namespace Web_API_for_scheduling.Models.repositories
+namespace Web_API_for_scheduling.Models.repositories.implementation
 {
-    public class SubjectsRepository(TimetableDbContext context) : IRepository<Subject>
+    public class GroupsRepository(TimetableDbContext context) : IRepository<Group>
     {
         private readonly TimetableDbContext _context = context;
         public async Task<bool?> DeleteAsync(Guid id)
         {
-            var subject = await _context.Subject.FindAsync(id);
-            if (subject == null) return false;
-            if (await _context.Pair.FirstAsync(i => i.SubjectID == id) != null) return null;
-            _context.Subject.Remove(subject);
+            var squad = await _context.Group.FindAsync(id);
+            if (squad == null) return false;
+            if (await _context.Pair.FirstAsync(i => i.GroupID == id) != null) return null;
+            _context.Group.Remove(squad);
             await _context.SaveChangesAsync();
             return true;
         }
-        public bool EntityExists(Guid id) => _context.Subject.Any(e => e.ID == id);
-        public async Task<Subject?> GetAsync(Guid id) => await _context.Subject.FindAsync(id);
-        public async Task<IEnumerable<Subject>> GetListAsync() => await _context.Subject.ToListAsync();
-        public async Task<bool> PostData(Subject entity)
+        public bool EntityExists(Guid id) => _context.Group.Any(e => e.ID == id);
+        public async Task<Group?> GetAsync(Guid id) => await _context.Group.FindAsync(id);
+        public async Task<IEnumerable<Group>> GetListAsync() => await _context.Group.ToListAsync();
+        public async Task<bool> PostData(Group entity)
         {
-            _context.Subject.Add(entity);
+            _context.Group.Add(entity);
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool?> PutData(Guid id, Subject entity)
+        public async Task<bool?> PutData(Guid id, Group entity)
         {
             if (id != entity.ID) return false;
-
             _context.Entry(entity).State = EntityState.Modified;
-
             try
             {
                 await _context.SaveChangesAsync();

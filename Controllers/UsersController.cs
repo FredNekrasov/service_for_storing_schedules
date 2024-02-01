@@ -2,58 +2,57 @@
 using Web_API_for_scheduling.Models.entities;
 using Web_API_for_scheduling.Models.repositories;
 
-namespace Web_API_for_scheduling.Controllers
+namespace Web_API_for_scheduling.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class UsersController(IRepository<Users> repository) : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController(IRepository<Users> repository) : ControllerBase
+    private readonly IRepository<Users> _repository = repository;
+
+    // GET: api/Users
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Users>>> GetUsers() => Ok((List<Users>)await _repository.GetListAsync());
+
+    // GET: api/Users/5
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Users>> GetUser(Guid id)
     {
-        private readonly IRepository<Users> _repository = repository;
+        var user = await _repository.GetAsync(id);
+        if (user == null) return NotFound();
+        return Ok(user);
+    }
 
-        // GET: api/Users
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Users>>> GetUsers() => (List<Users>)await _repository.GetListAsync();
-
-        // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Users>> GetUser(Guid id)
+    // PUT: api/Users/5
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutUser(Guid id, Users user)
+    {
+        bool? result = await _repository.PutData(id, user);
+        return result switch
         {
-            var user = await _repository.GetAsync(id);
-            if (user == null) return NotFound();
-            return user;
-        }
+            false => BadRequest(),
+            null => NotFound(),
+            true => NoContent(),
+        };
+    }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(Guid id, Users user)
-        {
-            bool? result = await _repository.PutData(id, user);
-            return result switch
-            {
-                false => BadRequest(),
-                null => NotFound(),
-                true => NoContent(),
-            };
-        }
+    // POST: api/Users
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPost]
+    public async Task<ActionResult<Users>> PostUsers(Users users)
+    {
+        bool result = await _repository.PostData(users);
+        if (result == false) return BadRequest();
+        return Ok();
+    }
 
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Users>> PostUsers(Users users)
-        {
-            bool result = await _repository.PostData(users);
-            if (result == false) return BadRequest();
-            return Ok();
-        }
-
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUsers(Guid id)
-        {
-            bool? result = await _repository.DeleteAsync(id);
-            if (result == false) return BadRequest();
-            return Ok();
-        }
+    // DELETE: api/Users/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteUsers(Guid id)
+    {
+        bool? result = await _repository.DeleteAsync(id);
+        if (result == false) return BadRequest();
+        return Ok();
     }
 }

@@ -10,6 +10,9 @@ using Web_API_for_scheduling.Models.mappers.day;
 using Web_API_for_scheduling.Models.mappers.pair;
 using Web_API_for_scheduling.Models.mappers.week;
 using Web_API_for_scheduling.Models.repositories;
+using Web_API_for_scheduling.Models.repositories.implementation;
+using Web_API_for_scheduling.Models.repositories.implementation.date;
+using Web_API_for_scheduling.Models.repositories.implementation.room;
 
 var builder = WebApplication.CreateBuilder(args);
 

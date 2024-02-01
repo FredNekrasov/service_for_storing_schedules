@@ -2,7 +2,7 @@
 using Web_API_for_scheduling.models;
 using Web_API_for_scheduling.Models.entities;
 
-namespace Web_API_for_scheduling.Models.repositories
+namespace Web_API_for_scheduling.Models.repositories.implementation
 {
     public class TeachersRepository(TimetableDbContext context) : IRepository<Teacher>
     {
