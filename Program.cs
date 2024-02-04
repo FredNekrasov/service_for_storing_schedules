@@ -14,13 +14,15 @@ using Web_API_for_scheduling.Models.repositories.implementation;
 using Web_API_for_scheduling.Models.repositories;
 using API_for_mobile_app.model.repositories.user_repository;
 using API_for_mobile_app.model.repositories.user_repository.implementation;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<TimetableDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TimetableConnectionString")));
-
 builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IMapSpecialEntities<AudienceDto, Audience>, MapAudience>();
