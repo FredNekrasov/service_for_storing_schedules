@@ -9,12 +9,12 @@ namespace Web_API_for_scheduling.Controllers.date;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SemestersController(IRepository<Semester> repository, IMapper mapper) : ControllerBase, IController<SemesterDto>
+public class SemestersController(IRepository<Semester> repository, IMapper mapper) : ControllerBase, IController
 {
     private readonly IRepository<Semester> _repository = repository;
     private readonly IMapper _mapper = mapper;
     [HttpGet]
-    public ActionResult<IEnumerable<SemesterDto>> GetList()
+    public ActionResult GetList()
     {
         var result = _repository.GetList();
         if (result == null) return NoContent();

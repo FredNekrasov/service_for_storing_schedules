@@ -9,12 +9,12 @@ namespace Web_API_for_scheduling.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class GroupsController(IRepository<Group> repository, IMapper mapper) : ControllerBase, IController<GroupDto>
+public class GroupsController(IRepository<Group> repository, IMapper mapper) : ControllerBase, IController
 {
     private readonly IRepository<Group> _repository = repository;
     private readonly IMapper _mapper = mapper;
     [HttpGet]
-    public ActionResult<IEnumerable<GroupDto>> GetList()
+    public ActionResult GetList()
     {
         var result = _repository.GetList();
         if (result == null) return NoContent();

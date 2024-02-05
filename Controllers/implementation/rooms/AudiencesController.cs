@@ -9,12 +9,12 @@ namespace Web_API_for_scheduling.Controllers.rooms;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AudiencesController(IRepository<Audience> repository, IMapSpecialEntities<AudienceDto, Audience> mapper) : ControllerBase, IController<AudienceDto>
+public class AudiencesController(IRepository<Audience> repository, IMapSpecialEntities<AudienceDto, Audience> mapper) : ControllerBase, IController
 {
     private readonly IRepository<Audience> _repository = repository;
     private readonly IMapSpecialEntities<AudienceDto, Audience> _mapper = mapper;
     [HttpGet]
-    public ActionResult<IEnumerable<AudienceDto>> GetList()
+    public ActionResult GetList()
     {
         List<AudienceDto> list = [];
         var result = _repository.GetList();

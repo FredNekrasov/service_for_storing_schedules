@@ -9,12 +9,12 @@ namespace Web_API_for_scheduling.Controllers.date;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DaysController(IRepository<Day> repository, IMapSpecialEntities<DayDto, Day> mapper) : ControllerBase, IController<DayDto>
+public class DaysController(IRepository<Day> repository, IMapSpecialEntities<DayDto, Day> mapper) : ControllerBase, IController
 {
     private readonly IRepository<Day> _repository = repository;
     private readonly IMapSpecialEntities<DayDto, Day> _mapper = mapper;
     [HttpGet]
-    public ActionResult<IEnumerable<DayDto>> GetList()
+    public ActionResult GetList()
     {
         List<DayDto> list = [];
         var result = _repository.GetList();

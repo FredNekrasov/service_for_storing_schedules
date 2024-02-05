@@ -2,8 +2,8 @@
 
 namespace API_for_mobile_app.Controllers
 {
-    public interface IController<T>
+    public interface IController
     {
-        ActionResult<IEnumerable<T>> GetList();
+        ActionResult GetList();
     }
 }

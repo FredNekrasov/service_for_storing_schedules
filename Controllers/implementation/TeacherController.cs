@@ -8,12 +8,12 @@ namespace API_for_mobile_app.Controllers.implementation
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TeacherController(IRepository<Teacher> repository, IMapper mapper) : ControllerBase, IController<TeacherDto>
+    public class TeacherController(IRepository<Teacher> repository, IMapper mapper) : ControllerBase, IController
     {
         private readonly IRepository<Teacher> _repository = repository;
         private readonly IMapper _mapper = mapper;
         [HttpGet]
-        public ActionResult<IEnumerable<TeacherDto>> GetList()
+        public ActionResult GetList()
         {
             var result = _repository.GetList();
             if (result == null) return NoContent();

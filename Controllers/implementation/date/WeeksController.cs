@@ -9,12 +9,12 @@ namespace Web_API_for_scheduling.Controllers.date;
 
 [Route("api/[controller]")]
 [ApiController]
-public class WeeksController(IRepository<Week> repository, IMapSpecialEntities<WeekDto, Week> mapper) : ControllerBase, IController<WeekDto>
+public class WeeksController(IRepository<Week> repository, IMapSpecialEntities<WeekDto, Week> mapper) : ControllerBase, IController
 {
     private readonly IRepository<Week> _repository = repository;
     private readonly IMapSpecialEntities<WeekDto, Week> _mapper = mapper;
     [HttpGet]
-    public ActionResult<IEnumerable<WeekDto>> GetList()
+    public ActionResult GetList()
     {
         List<WeekDto> list = [];
         var result = _repository.GetList();

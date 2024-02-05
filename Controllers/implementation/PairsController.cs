@@ -9,12 +9,12 @@ namespace Web_API_for_scheduling.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PairsController(IRepository<Pair> repository, IMapSpecialEntities<PairDto, Pair> mapper) : ControllerBase, IController<PairDto>
+public class PairsController(IRepository<Pair> repository, IMapSpecialEntities<PairDto, Pair> mapper) : ControllerBase, IController
 {
     private readonly IRepository<Pair> _repository = repository;
     private readonly IMapSpecialEntities<PairDto, Pair> _mapper = mapper;
     [HttpGet]
-    public ActionResult<IEnumerable<PairDto>> GetList()
+    public ActionResult GetList()
     {
         List<PairDto> list = [];
         var result = _repository.GetList();
