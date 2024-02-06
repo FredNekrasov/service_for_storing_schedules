@@ -7,11 +7,11 @@ namespace Web_API_for_scheduling.Models.entities
     [PrimaryKey(nameof(PairID))]
     public class Pair
     {
-        public Guid PairID { get; set; }
-        public Guid? AudienceID { get; set; }
-        public Guid? GroupID { get; set; }
-        public Guid? SubjectID { get; set; }
-        public Guid? TeacherID { get; set; }
+        public int PairID { get; set; }
+        public int AudienceID { get; set; }
+        public int GroupID { get; set; }
+        public int SubjectID { get; set; }
+        public int TeacherID { get; set; }
         public virtual ICollection<Day> Days { get; set; }
         public virtual ICollection<Day> Days1 { get; set; }
         public virtual ICollection<Day> Days2 { get; set; }

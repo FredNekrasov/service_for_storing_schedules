@@ -4,7 +4,6 @@ using Web_API_for_scheduling.models;
 using Web_API_for_scheduling.Models.entities;
 using Web_API_for_scheduling.Models.entities.date;
 using Web_API_for_scheduling.Models.entities.rooms;
-using Web_API_for_scheduling.Models.mappers;
 using Web_API_for_scheduling.Models.mappers.audience;
 using Web_API_for_scheduling.Models.mappers.day;
 using Web_API_for_scheduling.Models.mappers.pair;
@@ -17,11 +16,9 @@ using Web_API_for_scheduling.Models.repositories.implementation.room;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<TimetableDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TimetableConnectionString")));
+builder.Services.AddDbContext<TimetableDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("TimetableConnectionString")));
 builder.Services.AddControllers();
-builder.Services.AddControllers().AddJsonOptions(x =>
-    x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IMapAudience, MapAudience>();

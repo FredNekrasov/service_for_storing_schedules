@@ -5,16 +5,16 @@ namespace Web_API_for_scheduling.Models.entities.date
     [PrimaryKey(nameof(ID))]
     public class Day
     {
-        public Guid ID { get; set; }
+        public int ID { get; set; }
         public string DayOfWeek { get; set; } = string.Empty;
-        public Guid? WeekID { get; set; }
-        public Guid? FirstPairID { get; set; }
-        public Guid? SecondPairID { get; set; }
-        public Guid? ThirdPairID { get; set; }
-        public Guid? FourthPairID { get; set; }
-        public Guid? FifthPairID { get; set; }
-        public Guid? SixthPairID { get; set; }
-        public Guid? SeventhPairID { get; set; }
+        public int WeekID { get; set; }
+        public int? FirstPairID { get; set; }
+        public int? SecondPairID { get; set; }
+        public int? ThirdPairID { get; set; }
+        public int? FourthPairID { get; set; }
+        public int? FifthPairID { get; set; }
+        public int? SixthPairID { get; set; }
+        public int? SeventhPairID { get; set; }
         public virtual Pair Pair1 { get; set; }
         public virtual Pair Pair2 { get; set; }
         public virtual Pair Pair3 { get; set; }
