@@ -1,19 +1,19 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Web_API_for_scheduling.Models.dto.rooms;
-using Web_API_for_scheduling.Models.entities.rooms;
+using Web_API_for_scheduling.Models.dto;
+using Web_API_for_scheduling.Models.entities;
 using Web_API_for_scheduling.Models.repositories;
 
-namespace Web_API_for_scheduling.Controllers.rooms;
+namespace Web_API_for_scheduling.Controllers.implementation;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AudienceTypesController(IRepository<AudienceType> repository, IMapper mapper) : ControllerBase, IController<AudienceTypeDto>
+public class GroupsController(IRepository<Group> repository, IMapper mapper) : ControllerBase, IController<GroupDto>
 {
-    private readonly IRepository<AudienceType> _repository = repository;
+    private readonly IRepository<Group> _repository = repository;
     private readonly IMapper _mapper = mapper;
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteRecordAsync(Guid id)
+    public async Task<IActionResult> DeleteRecordAsync(int id)
     {
         bool? result = await _repository.DeleteAsync(id);
         return result switch
@@ -24,32 +24,32 @@ public class AudienceTypesController(IRepository<AudienceType> repository, IMapp
         };
     }
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AudienceTypeDto>>> GetListAsync()
+    public async Task<ActionResult<IEnumerable<GroupDto>>> GetListAsync()
     {
         var result = await _repository.GetListAsync();
         if (result == null) return NoContent();
-        List<AudienceTypeDto> list = _mapper.Map<List<AudienceTypeDto>>(result);
+        List<GroupDto> list = _mapper.Map<List<GroupDto>>(result);
         return Ok(list);
     }
     [HttpGet("{id}")]
-    public async Task<ActionResult<AudienceTypeDto>> GetRecordAsync(Guid id)
+    public async Task<ActionResult<GroupDto>> GetRecordAsync(int id)
     {
         var record = await _repository.GetAsync(id);
         if (record == null) return NotFound();
-        AudienceTypeDto dto = _mapper.Map<AudienceTypeDto>(record);
+        GroupDto dto = _mapper.Map<GroupDto>(record);
         return Ok(dto);
     }
     [HttpPost]
-    public async Task<IActionResult> PostRecordAsync(AudienceTypeDto dto)
+    public async Task<IActionResult> PostRecordAsync(GroupDto dto)
     {
-        AudienceType record = _mapper.Map<AudienceType>(dto);
+        Group record = _mapper.Map<Group>(dto);
         await _repository.PostData(record);
         return Ok();
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutRecordAsync(Guid id, AudienceTypeDto dto)
+    public async Task<IActionResult> PutRecordAsync(int id, GroupDto dto)
     {
-        AudienceType record = _mapper.Map<AudienceType>(dto);
+        Group record = _mapper.Map<Group>(dto);
         bool? result = await _repository.PutData(id, record);
         return result switch
         {

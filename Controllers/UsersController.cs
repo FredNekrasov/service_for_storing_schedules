@@ -16,7 +16,7 @@ public class UsersController(IRepository<Users> repository) : ControllerBase
 
     // GET: api/Users/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Users>> GetUser(Guid id)
+    public async Task<ActionResult<Users>> GetUser(int id)
     {
         var user = await _repository.GetAsync(id);
         if (user == null) return NotFound();
@@ -26,7 +26,7 @@ public class UsersController(IRepository<Users> repository) : ControllerBase
     // PUT: api/Users/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutUser(Guid id, Users user)
+    public async Task<IActionResult> PutUser(int id, Users user)
     {
         bool? result = await _repository.PutData(id, user);
         return result switch
@@ -49,7 +49,7 @@ public class UsersController(IRepository<Users> repository) : ControllerBase
 
     // DELETE: api/Users/5
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUsers(Guid id)
+    public async Task<IActionResult> DeleteUsers(int id)
     {
         bool? result = await _repository.DeleteAsync(id);
         if (result == false) return BadRequest();

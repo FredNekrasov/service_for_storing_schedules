@@ -1,19 +1,19 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Web_API_for_scheduling.Models.entities.date;
-using Web_API_for_scheduling.Models.dto.date;
+using Web_API_for_scheduling.Models.dto.rooms;
+using Web_API_for_scheduling.Models.entities.rooms;
 using Web_API_for_scheduling.Models.repositories;
 
-namespace Web_API_for_scheduling.Controllers.date;
+namespace Web_API_for_scheduling.Controllers.implementation.rooms;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SemestersController(IRepository<Semester> repository, IMapper mapper) : ControllerBase, IController<SemesterDto>
+public class AudienceTypesController(IRepository<AudienceType> repository, IMapper mapper) : ControllerBase, IController<AudienceTypeDto>
 {
-    private readonly IRepository<Semester> _repository = repository;
+    private readonly IRepository<AudienceType> _repository = repository;
     private readonly IMapper _mapper = mapper;
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteRecordAsync(Guid id)
+    public async Task<IActionResult> DeleteRecordAsync(int id)
     {
         bool? result = await _repository.DeleteAsync(id);
         return result switch
@@ -24,32 +24,32 @@ public class SemestersController(IRepository<Semester> repository, IMapper mappe
         };
     }
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<SemesterDto>>> GetListAsync()
+    public async Task<ActionResult<IEnumerable<AudienceTypeDto>>> GetListAsync()
     {
         var result = await _repository.GetListAsync();
         if (result == null) return NoContent();
-        List<SemesterDto> list = _mapper.Map<List<SemesterDto>>(result);
+        List<AudienceTypeDto> list = _mapper.Map<List<AudienceTypeDto>>(result);
         return Ok(list);
     }
     [HttpGet("{id}")]
-    public async Task<ActionResult<SemesterDto>> GetRecordAsync(Guid id)
+    public async Task<ActionResult<AudienceTypeDto>> GetRecordAsync(int id)
     {
         var record = await _repository.GetAsync(id);
         if (record == null) return NotFound();
-        SemesterDto dto = _mapper.Map<SemesterDto>(record);
+        AudienceTypeDto dto = _mapper.Map<AudienceTypeDto>(record);
         return Ok(dto);
     }
     [HttpPost]
-    public async Task<IActionResult> PostRecordAsync(SemesterDto dto)
+    public async Task<IActionResult> PostRecordAsync(AudienceTypeDto dto)
     {
-        Semester record = _mapper.Map<Semester>(dto);
+        AudienceType record = _mapper.Map<AudienceType>(dto);
         await _repository.PostData(record);
         return Ok();
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutRecordAsync(Guid id, SemesterDto dto)
+    public async Task<IActionResult> PutRecordAsync(int id, AudienceTypeDto dto)
     {
-        Semester record = _mapper.Map<Semester>(dto);
+        AudienceType record = _mapper.Map<AudienceType>(dto);
         bool? result = await _repository.PutData(id, record);
         return result switch
         {

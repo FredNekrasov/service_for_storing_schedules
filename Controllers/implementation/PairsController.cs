@@ -1,21 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Web_API_for_scheduling.Models.dto.rooms;
-using Web_API_for_scheduling.Models.entities.rooms;
-using Web_API_for_scheduling.Models.mappers.audience;
+using Web_API_for_scheduling.Models.dto;
+using Web_API_for_scheduling.Models.entities;
+using Web_API_for_scheduling.Models.mappers.pair;
 using Web_API_for_scheduling.Models.repositories;
 
-namespace Web_API_for_scheduling.Controllers.rooms;
+namespace Web_API_for_scheduling.Controllers.implementation;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AudiencesController(IRepository<Audience> repository, IMapAudience mapper) : ControllerBase, IController<AudienceDto>
+public class PairsController(IRepository<Pair> repository, IMapPair mapper) : ControllerBase, IController<PairDto>
 {
-    private readonly IRepository<Audience> _repository = repository;
-    private readonly IMapAudience _mapper = mapper;
-    private AudienceDto? dto;
-    private readonly List<AudienceDto> list = [];
+    private readonly IRepository<Pair> _repository = repository;
+    private readonly IMapPair _mapper = mapper;
+    private PairDto? dto;
+    private readonly List<PairDto> list = [];
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteRecordAsync(Guid id)
+    public async Task<IActionResult> DeleteRecordAsync(int id)
     {
         bool? result = await _repository.DeleteAsync(id);
         return result switch
@@ -26,7 +26,7 @@ public class AudiencesController(IRepository<Audience> repository, IMapAudience 
         };
     }
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<AudienceDto>>> GetListAsync()
+    public async Task<ActionResult<IEnumerable<PairDto>>> GetListAsync()
     {
         var result = await _repository.GetListAsync();
         if (result == null) return NoContent();
@@ -35,10 +35,10 @@ public class AudiencesController(IRepository<Audience> repository, IMapAudience 
             dto = await _mapper.ToDtoAsync(item);
             list.Add(dto!);
         }
-        return Ok(list);
+        return Ok(dto);
     }
     [HttpGet("{id}")]
-    public async Task<ActionResult<AudienceDto>> GetRecordAsync(Guid id)
+    public async Task<ActionResult<PairDto>> GetRecordAsync(int id)
     {
         var record = await _repository.GetAsync(id);
         if (record == null) return NotFound();
@@ -47,19 +47,19 @@ public class AudiencesController(IRepository<Audience> repository, IMapAudience 
         return Ok(dto);
     }
     [HttpPost]
-    public async Task<IActionResult> PostRecordAsync(AudienceDto dto)
+    public async Task<IActionResult> PostRecordAsync(PairDto dto)
     {
-        bool result = _repository.EntityExists(dto.ID);
+        bool result = _repository.EntityExists(dto.PairID);
         if (result) return BadRequest();
-        Audience? record = await _mapper.ToAudienceAsync(dto);
+        Pair? record = _mapper.ToPair(dto);
         if (record == null) return BadRequest();
         await _repository.PostData(record);
         return Ok();
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutRecordAsync(Guid id, AudienceDto dto)
+    public async Task<IActionResult> PutRecordAsync(int id, PairDto dto)
     {
-        Audience? record = await _mapper.ToAudienceAsync(dto);
+        Pair? record = _mapper.ToPair(dto);
         if (record == null) return BadRequest();
         bool? result = await _repository.PutData(id, record);
         return result switch

@@ -4,7 +4,7 @@ using Web_API_for_scheduling.Models.entities.date;
 using Web_API_for_scheduling.Models.mappers.week;
 using Web_API_for_scheduling.Models.repositories;
 
-namespace Web_API_for_scheduling.Controllers.date;
+namespace Web_API_for_scheduling.Controllers.implementation.date;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -15,7 +15,7 @@ public class WeeksController(IRepository<Week> repository, IMapWeek mapper) : Co
     private WeekDto? weekDto;
     private readonly List<WeekDto> list = [];
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteRecordAsync(Guid id)
+    public async Task<IActionResult> DeleteRecordAsync(int id)
     {
         bool? result = await _repository.DeleteAsync(id);
         return result switch
@@ -38,7 +38,7 @@ public class WeeksController(IRepository<Week> repository, IMapWeek mapper) : Co
         return Ok(list);
     }
     [HttpGet("{id}")]
-    public async Task<ActionResult<WeekDto>> GetRecordAsync(Guid id)
+    public async Task<ActionResult<WeekDto>> GetRecordAsync(int id)
     {
         Week? record = await _repository.GetAsync(id);
         if (record == null) return NotFound();
@@ -57,7 +57,7 @@ public class WeeksController(IRepository<Week> repository, IMapWeek mapper) : Co
         return Ok();
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutRecordAsync(Guid id, WeekDto dto)
+    public async Task<IActionResult> PutRecordAsync(int id, WeekDto dto)
     {
         Week? record = _mapper.ToWeek(dto);
         if (record == null) return BadRequest();

@@ -4,16 +4,16 @@ using Web_API_for_scheduling.Models.dto;
 using Web_API_for_scheduling.Models.entities;
 using Web_API_for_scheduling.Models.repositories;
 
-namespace Web_API_for_scheduling.Controllers;
+namespace Web_API_for_scheduling.Controllers.implementation;
 
 [Route("api/[controller]")]
 [ApiController]
-public class SubjectsController(IRepository<Subject> repository, IMapper mapper) : ControllerBase, IController<SubjectDto>
+public class TeachersController(IRepository<Teacher> repository, IMapper mapper) : ControllerBase, IController<TeacherDto>
 {
-    private readonly IRepository<Subject> _repository = repository;
+    private readonly IRepository<Teacher> _repository = repository;
     private readonly IMapper _mapper = mapper;
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteRecordAsync(Guid id)
+    public async Task<IActionResult> DeleteRecordAsync(int id)
     {
         bool? result = await _repository.DeleteAsync(id);
         return result switch
@@ -24,32 +24,32 @@ public class SubjectsController(IRepository<Subject> repository, IMapper mapper)
         };
     }
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<SubjectDto>>> GetListAsync()
+    public async Task<ActionResult<IEnumerable<TeacherDto>>> GetListAsync()
     {
         var result = await _repository.GetListAsync();
         if (result == null) return NoContent();
-        List<SubjectDto> list = _mapper.Map<List<SubjectDto>>(result);
+        List<TeacherDto> list = _mapper.Map<List<TeacherDto>>(result);
         return Ok(list);
     }
     [HttpGet("{id}")]
-    public async Task<ActionResult<SubjectDto>> GetRecordAsync(Guid id)
+    public async Task<ActionResult<TeacherDto>> GetRecordAsync(int id)
     {
         var record = await _repository.GetAsync(id);
         if (record == null) return NotFound();
-        SubjectDto dto = _mapper.Map<SubjectDto>(record);
+        TeacherDto dto = _mapper.Map<TeacherDto>(record);
         return Ok(dto);
     }
     [HttpPost]
-    public async Task<IActionResult> PostRecordAsync(SubjectDto dto)
+    public async Task<IActionResult> PostRecordAsync(TeacherDto dto)
     {
-        Subject record = _mapper.Map<Subject>(dto);
+        Teacher record = _mapper.Map<Teacher>(dto);
         await _repository.PostData(record);
         return Ok();
     }
     [HttpPut("{id}")]
-    public async Task<IActionResult> PutRecordAsync(Guid id, SubjectDto dto)
+    public async Task<IActionResult> PutRecordAsync(int id, TeacherDto dto)
     {
-        Subject record = _mapper.Map<Subject>(dto);
+        Teacher record = _mapper.Map<Teacher>(dto);
         bool? result = await _repository.PutData(id, record);
         return result switch
         {
