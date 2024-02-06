@@ -2,10 +2,10 @@
 {
     public class AudienceDto
     {
-        public Guid ID { get; set; }
-        public AudienceTypeDto? AudienceType { get; set; }
-        public int? SeatsNumber { get; set; }
-        public int? StudentNumber { get; set; }
+        public int ID { get; set; }
+        public AudienceTypeDto AudienceType { get; set; }
+        public int SeatsNumber { get; set; }
+        public int StudentNumber { get; set; }
         public string AudienceNumber { get; set; } = string.Empty;
     }
 }

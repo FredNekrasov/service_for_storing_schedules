@@ -2,9 +2,9 @@
 {
     public class GroupDto
     {
-        public Guid ID { get; set; }
+        public int ID { get; set; }
         public string GroupNumber { get; set; } = string.Empty;
         public string ShortNumber { get; set; } = string.Empty;
-        public int? StudentNumber { get; set; }
+        public int StudentNumber { get; set; }
     }
 }
