@@ -7,7 +7,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
     public class GroupsRepository(TimetableDbContext context) : IRepository<Group>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool?> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(int id)
         {
             var squad = await _context.Group.FindAsync(id);
             if (squad == null) return false;
@@ -16,8 +16,8 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
             await _context.SaveChangesAsync();
             return true;
         }
-        public bool EntityExists(Guid id) => _context.Group.Any(e => e.ID == id);
-        public async Task<Group?> GetAsync(Guid id) => await _context.Group.FindAsync(id);
+        public bool EntityExists(int id) => _context.Group.Any(e => e.ID == id);
+        public async Task<Group?> GetAsync(int id) => await _context.Group.FindAsync(id);
         public async Task<IEnumerable<Group>> GetListAsync() => await _context.Group.ToListAsync();
         public async Task<bool> PostData(Group entity)
         {
@@ -25,7 +25,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool?> PutData(Guid id, Group entity)
+        public async Task<bool?> PutData(int id, Group entity)
         {
             if (id != entity.ID) return false;
             _context.Entry(entity).State = EntityState.Modified;

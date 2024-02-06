@@ -7,7 +7,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation.date
     public class WeeksRepository(TimetableDbContext context) : IRepository<Week>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool?> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(int id)
         {
             var week = await _context.Week.FindAsync(id);
             if (week == null) return false;
@@ -16,8 +16,8 @@ namespace Web_API_for_scheduling.Models.repositories.implementation.date
             await _context.SaveChangesAsync();
             return true;
         }
-        public bool EntityExists(Guid id) => _context.Week.Any(e => e.ID == id);
-        public async Task<Week?> GetAsync(Guid id) => await _context.Week.FindAsync(id);
+        public bool EntityExists(int id) => _context.Week.Any(e => e.ID == id);
+        public async Task<Week?> GetAsync(int id) => await _context.Week.FindAsync(id);
         public async Task<IEnumerable<Week>> GetListAsync() => await _context.Week.ToListAsync();
         public async Task<bool> PostData(Week entity)
         {
@@ -25,7 +25,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation.date
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool?> PutData(Guid id, Week entity)
+        public async Task<bool?> PutData(int id, Week entity)
         {
             if (id != entity.ID) return false;
             _context.Entry(entity).State = EntityState.Modified;

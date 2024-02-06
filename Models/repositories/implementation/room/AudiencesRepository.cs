@@ -7,7 +7,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation.room
     public class AudiencesRepository(TimetableDbContext context) : IRepository<Audience>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool?> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(int id)
         {
             var audience = await _context.Audience.FindAsync(id);
             if (audience == null) return false;
@@ -16,8 +16,8 @@ namespace Web_API_for_scheduling.Models.repositories.implementation.room
             await _context.SaveChangesAsync();
             return true;
         }
-        public bool EntityExists(Guid id) => _context.Audience.Any(e => e.ID == id);
-        public async Task<Audience?> GetAsync(Guid id) => await _context.Audience.FindAsync(id);
+        public bool EntityExists(int id) => _context.Audience.Any(e => e.ID == id);
+        public async Task<Audience?> GetAsync(int id) => await _context.Audience.FindAsync(id);
         public async Task<IEnumerable<Audience>> GetListAsync() => await _context.Audience.ToListAsync();
         public async Task<bool> PostData(Audience entity)
         {
@@ -25,7 +25,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation.room
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool?> PutData(Guid id, Audience entity)
+        public async Task<bool?> PutData(int id, Audience entity)
         {
             if (id != entity.ID) return false;
 

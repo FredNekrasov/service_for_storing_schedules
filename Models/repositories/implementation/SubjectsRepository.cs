@@ -7,7 +7,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
     public class SubjectsRepository(TimetableDbContext context) : IRepository<Subject>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool?> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(int id)
         {
             var subject = await _context.Subject.FindAsync(id);
             if (subject == null) return false;
@@ -16,8 +16,8 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
             await _context.SaveChangesAsync();
             return true;
         }
-        public bool EntityExists(Guid id) => _context.Subject.Any(e => e.ID == id);
-        public async Task<Subject?> GetAsync(Guid id) => await _context.Subject.FindAsync(id);
+        public bool EntityExists(int id) => _context.Subject.Any(e => e.ID == id);
+        public async Task<Subject?> GetAsync(int id) => await _context.Subject.FindAsync(id);
         public async Task<IEnumerable<Subject>> GetListAsync() => await _context.Subject.ToListAsync();
         public async Task<bool> PostData(Subject entity)
         {
@@ -25,7 +25,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool?> PutData(Guid id, Subject entity)
+        public async Task<bool?> PutData(int id, Subject entity)
         {
             if (id != entity.ID) return false;
 

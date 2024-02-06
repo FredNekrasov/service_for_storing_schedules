@@ -7,7 +7,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
     public class UsersRepository(TimetableDbContext context) : IRepository<Users>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool?> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(int id)
         {
             var users = await _context.Users.FindAsync(id);
             if (users == null) return false;
@@ -16,8 +16,8 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
             await _context.SaveChangesAsync();
             return true;
         }
-        public bool EntityExists(Guid id) => _context.Users.Any(e => e.UserID == id);
-        public async Task<Users?> GetAsync(Guid id) => await _context.Users.FindAsync(id);
+        public bool EntityExists(int id) => _context.Users.Any(e => e.UserID == id);
+        public async Task<Users?> GetAsync(int id) => await _context.Users.FindAsync(id);
         public async Task<IEnumerable<Users>> GetListAsync() => await _context.Users.ToListAsync();
         public async Task<bool> PostData(Users entity)
         {
@@ -26,7 +26,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
             return true;
         }
 
-        public async Task<bool?> PutData(Guid id, Users entity)
+        public async Task<bool?> PutData(int id, Users entity)
         {
             if (id != entity.UserID) return false;
             _context.Entry(entity).State = EntityState.Modified;

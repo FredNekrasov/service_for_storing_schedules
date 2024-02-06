@@ -7,7 +7,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
     public class PairsRepository(TimetableDbContext context) : IRepository<Pair>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool?> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(int id)
         {
             var pair = await _context.Pair.FindAsync(id);
             if (pair == null) return false;
@@ -22,8 +22,8 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
             await _context.SaveChangesAsync();
             return true;
         }
-        public bool EntityExists(Guid id) => _context.Pair.Any(e => e.PairID == id);
-        public async Task<Pair?> GetAsync(Guid id) => await _context.Pair.FindAsync(id);
+        public bool EntityExists(int id) => _context.Pair.Any(e => e.PairID == id);
+        public async Task<Pair?> GetAsync(int id) => await _context.Pair.FindAsync(id);
         public async Task<IEnumerable<Pair>> GetListAsync() => await _context.Pair.ToListAsync();
         public async Task<bool> PostData(Pair entity)
         {
@@ -31,7 +31,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool?> PutData(Guid id, Pair entity)
+        public async Task<bool?> PutData(int id, Pair entity)
         {
             if (id != entity.PairID) return false;
 

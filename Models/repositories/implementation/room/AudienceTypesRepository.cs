@@ -7,7 +7,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation.room
     public class AudienceTypesRepository(TimetableDbContext context) : IRepository<AudienceType>
     {
         private readonly TimetableDbContext _context = context;
-        public async Task<bool?> DeleteAsync(Guid id)
+        public async Task<bool?> DeleteAsync(int id)
         {
             var audienceType = await _context.AudienceType.FindAsync(id);
             if (audienceType == null) return false;
@@ -16,8 +16,8 @@ namespace Web_API_for_scheduling.Models.repositories.implementation.room
             await _context.SaveChangesAsync();
             return true;
         }
-        public bool EntityExists(Guid id) => _context.AudienceType.Any(e => e.ID == id);
-        public async Task<AudienceType?> GetAsync(Guid id) => await _context.AudienceType.FindAsync(id);
+        public bool EntityExists(int id) => _context.AudienceType.Any(e => e.ID == id);
+        public async Task<AudienceType?> GetAsync(int id) => await _context.AudienceType.FindAsync(id);
         public async Task<IEnumerable<AudienceType>> GetListAsync() => await _context.AudienceType.ToListAsync();
         public async Task<bool> PostData(AudienceType entity)
         {
@@ -26,7 +26,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation.room
             return true;
         }
 
-        public async Task<bool?> PutData(Guid id, AudienceType entity)
+        public async Task<bool?> PutData(int id, AudienceType entity)
         {
             if (id != entity.ID) return false;
             _context.Entry(entity).State = EntityState.Modified;
