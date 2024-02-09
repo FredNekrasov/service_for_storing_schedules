@@ -6,7 +6,7 @@ namespace API_for_mobile_app.model.repositories.user_repository.implementation
     public class UserRepository(TimetableDbContext context) : IUserRepository
     {
         private readonly TimetableDbContext _context = context;
-        public bool DeleteAsync(Guid id)
+        public bool DeleteAsync(int id)
         {
             var users = _context.Users.Find(id);
             if (users == null) return false;
@@ -15,8 +15,8 @@ namespace API_for_mobile_app.model.repositories.user_repository.implementation
             _context.SaveChanges();
             return true;
         }
-        public bool EntityExists(Guid id) => _context.Users.Any(e => e.UserID == id);
-        public Users? GetAsync(Guid id) => _context.Users.Find(id);
+        public bool EntityExists(int id) => _context.Users.Any(e => e.UserID == id);
+        public Users? GetAsync(int id) => _context.Users.Find(id);
         public IEnumerable<Users> GetListAsync() => _context.Users.ToList();
         public bool PostData(Users entity)
         {
@@ -24,7 +24,7 @@ namespace API_for_mobile_app.model.repositories.user_repository.implementation
             _context.SaveChanges();
             return true;
         }
-        public bool? PutData(Guid id, Users entity)
+        public bool? PutData(int id, Users entity)
         {
             if (id != entity.UserID) return false;
             _context.Entry(entity).State = EntityState.Modified;

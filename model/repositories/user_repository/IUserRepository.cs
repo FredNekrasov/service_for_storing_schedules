@@ -5,10 +5,10 @@ namespace API_for_mobile_app.model.repositories.user_repository
     public interface IUserRepository
     {
         IEnumerable<Users> GetListAsync();
-        Users? GetAsync(Guid id);
-        bool DeleteAsync(Guid id);
+        Users? GetAsync(int id);
+        bool DeleteAsync(int id);
         bool PostData(Users entity);
-        bool? PutData(Guid id, Users entity);
-        bool EntityExists(Guid id);
+        bool? PutData(int id, Users entity);
+        bool EntityExists(int id);
     }
 }
