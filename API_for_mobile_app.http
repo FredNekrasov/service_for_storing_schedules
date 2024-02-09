@@ -1,4 +1,4 @@
-@API_for_mobile_app_HostAddress = http://localhost:5141
+@API_for_mobile_app_HostAddress = http://192.168.1.231:5141
 
 GET {{API_for_mobile_app_HostAddress}}/weatherforecast/
 Accept: application/json
