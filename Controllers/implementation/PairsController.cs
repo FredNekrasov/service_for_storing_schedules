@@ -35,7 +35,7 @@ public class PairsController(IRepository<Pair> repository, IMapPair mapper) : Co
             dto = await _mapper.ToDtoAsync(item);
             list.Add(dto!);
         }
-        return Ok(dto);
+        return Ok(list);
     }
     [HttpGet("{id}")]
     public async Task<ActionResult<PairDto>> GetRecordAsync(int id)
