@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
 using Web_API_for_scheduling.models;
 using Web_API_for_scheduling.Models.dto;
+using Web_API_for_scheduling.Models.dto.rooms;
 using Web_API_for_scheduling.Models.entities;
 using Web_API_for_scheduling.Models.entities.rooms;
-using Web_API_for_scheduling.Models.mappers.audience;
 
-namespace Web_API_for_scheduling.Models.mappers.pair
+namespace Web_API_for_scheduling.Models.mappers.specialEntities
 {
-    public class MapPair(TimetableDbContext context, IMapper mapper, IMapAudience mapAudience) : IMapSE<Pair, PairDto>
+    public class MapPair(TimetableDbContext context, IMapper mapper, IMapSE<Audience, AudienceDto> mapAudience) : IMapSE<Pair, PairDto>
     {
         private readonly TimetableDbContext _context = context;
         private readonly IMapper _mapper = mapper;
-        private readonly IMapAudience _mapAudience = mapAudience;
+        private readonly IMapSE<Audience, AudienceDto> _mapAudience = mapAudience;
         public async Task<PairDto?> ToDtoAsync(Pair entity)
         {
             Audience? audience = await _context.Audience.FindAsync(entity.AudienceID);

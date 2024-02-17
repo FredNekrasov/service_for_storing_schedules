@@ -3,7 +3,7 @@ using Web_API_for_scheduling.models;
 using Web_API_for_scheduling.Models.dto.date;
 using Web_API_for_scheduling.Models.entities.date;
 
-namespace Web_API_for_scheduling.Models.mappers.week
+namespace Web_API_for_scheduling.Models.mappers.specialEntities
 {
     public class MapWeek(TimetableDbContext context, IMapper mapper) : IMapSE<Week, WeekDto>
     {

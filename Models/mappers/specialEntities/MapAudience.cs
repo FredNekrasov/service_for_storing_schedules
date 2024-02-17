@@ -3,7 +3,7 @@ using Web_API_for_scheduling.models;
 using Web_API_for_scheduling.Models.dto.rooms;
 using Web_API_for_scheduling.Models.entities.rooms;
 
-namespace Web_API_for_scheduling.Models.mappers.audience
+namespace Web_API_for_scheduling.Models.mappers.specialEntities
 {
     public class MapAudience(TimetableDbContext context, IMapper mapper) : IMapSE<Audience, AudienceDto>
     {
