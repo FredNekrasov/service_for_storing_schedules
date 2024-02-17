@@ -27,27 +27,27 @@ namespace Web_API_for_scheduling.Models.mappers.specialEntities
 
         public async Task<DayDto?> ToDtoAsync(Day entity)
         {
+            int? p1 = entity.FirstPairID;
+            int? p2 = entity.SecondPairID;
+            int? p3 = entity.ThirdPairID;
+            int? p4 = entity.FourthPairID;
+            int? p5 = entity.FifthPairID;
+            int? p6 = entity.SixthPairID;
+            int? p7 = entity.SeventhPairID;
             Week? week = await _context.Week.FindAsync(entity.WeekID);
             if (week == null) return null;
-            Pair? pair1 = await _context.Pair.FindAsync(entity.FirstPairID);
-            Pair? pair2 = await _context.Pair.FindAsync(entity.SecondPairID);
-            Pair? pair3 = await _context.Pair.FindAsync(entity.ThirdPairID);
-            Pair? pair4 = await _context.Pair.FindAsync(entity.FourthPairID);
-            Pair? pair5 = await _context.Pair.FindAsync(entity.FifthPairID);
-            Pair? pair6 = await _context.Pair.FindAsync(entity.SixthPairID);
-            Pair? pair7 = await _context.Pair.FindAsync(entity.SeventhPairID);
             return new DayDto
             {
                 ID = entity.ID,
                 DayOfWeek = entity.DayOfWeek,
                 Week = await _mapWeek.ToDtoAsync(week),
-                Pair1 = pair1.PairID,
-                Pair2 = pair2.PairID,
-                Pair3 = pair3.PairID,
-                Pair4 = pair4.PairID,
-                Pair5 = pair5.PairID,
-                Pair6 = pair6.PairID,
-                Pair7 = pair7.PairID
+                Pair1 = p1,
+                Pair2 = p2,
+                Pair3 = p3,
+                Pair4 = p4,
+                Pair5 = p5,
+                Pair6 = p6,
+                Pair7 = p7
             };
         }
     }
