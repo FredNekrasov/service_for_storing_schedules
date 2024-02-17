@@ -1,9 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using Web_API_for_scheduling.models;
+using Web_API_for_scheduling.Models.dto;
+using Web_API_for_scheduling.Models.dto.date;
+using Web_API_for_scheduling.Models.dto.rooms;
 using Web_API_for_scheduling.Models.entities;
 using Web_API_for_scheduling.Models.entities.date;
 using Web_API_for_scheduling.Models.entities.rooms;
+using Web_API_for_scheduling.Models.mappers;
 using Web_API_for_scheduling.Models.mappers.specialEntities;
 using Web_API_for_scheduling.Models.repositories;
 using Web_API_for_scheduling.Models.repositories.implementation;
@@ -18,10 +22,10 @@ builder.Services.AddControllers();
 builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<IMapAudience, MapAudience>();
-builder.Services.AddScoped<IMapWeek, MapWeek>();
-builder.Services.AddScoped<IMapPair, MapPair>();
-builder.Services.AddScoped<IMapDay, MapDay>();
+builder.Services.AddScoped<IMapSE<Audience, AudienceDto>, MapAudience>();
+builder.Services.AddScoped<IMapSE<Week, WeekDto>, MapWeek>();
+builder.Services.AddScoped<IMapSE<Pair, PairDto>, MapPair>();
+builder.Services.AddScoped<IMapSE<Day, DayDto>, MapDay>();
 
 builder.Services.AddScoped<IRepository<Users>, UsersRepository>();
 builder.Services.AddScoped<IRepository<Group>, GroupsRepository>();
