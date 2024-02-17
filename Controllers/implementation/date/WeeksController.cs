@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Web_API_for_scheduling.Models.dto.date;
 using Web_API_for_scheduling.Models.entities.date;
-using Web_API_for_scheduling.Models.mappers.week;
+using Web_API_for_scheduling.Models.mappers;
 using Web_API_for_scheduling.Models.repositories;
 
 namespace Web_API_for_scheduling.Controllers.implementation.date;
 
 [Route("api/[controller]")]
 [ApiController]
-public class WeeksController(IRepository<Week> repository, IMapWeek mapper) : ControllerBase, IController<WeekDto>
+public class WeeksController(IRepository<Week> repository, IMapSE<Week, WeekDto> mapper) : ControllerBase, IController<WeekDto>
 {
     private readonly IRepository<Week> _repository = repository;
-    private readonly IMapWeek _mapper = mapper;
+    private readonly IMapSE<Week, WeekDto> _mapper = mapper;
     private WeekDto? weekDto;
     private readonly List<WeekDto> list = [];
     [HttpDelete("{id}")]
@@ -51,7 +51,7 @@ public class WeeksController(IRepository<Week> repository, IMapWeek mapper) : Co
     {
         bool result = _repository.EntityExists(dto.ID);
         if (result) return BadRequest();
-        Week? record = _mapper.ToWeek(dto);
+        Week? record = _mapper.ToEntity(dto);
         if (record == null) return BadRequest();
         await _repository.PostData(record);
         return Ok();
@@ -59,7 +59,7 @@ public class WeeksController(IRepository<Week> repository, IMapWeek mapper) : Co
     [HttpPut("{id}")]
     public async Task<IActionResult> PutRecordAsync(int id, WeekDto dto)
     {
-        Week? record = _mapper.ToWeek(dto);
+        Week? record = _mapper.ToEntity(dto);
         if (record == null) return BadRequest();
         bool? result = await _repository.PutData(id, record);
         return result switch

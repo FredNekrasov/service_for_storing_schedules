@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Web_API_for_scheduling.Models.dto.date;
 using Web_API_for_scheduling.Models.entities.date;
-using Web_API_for_scheduling.Models.mappers.day;
+using Web_API_for_scheduling.Models.mappers;
 using Web_API_for_scheduling.Models.repositories;
 
 namespace Web_API_for_scheduling.Controllers.implementation.date;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DaysController(IRepository<Day> repository, IMapDay mapper) : ControllerBase, IController<DayDto>
+public class DaysController(IRepository<Day> repository, IMapSE<Day, DayDto> mapper) : ControllerBase, IController<DayDto>
 {
     private readonly IRepository<Day> _repository = repository;
-    private readonly IMapDay _mapper = mapper;
+    private readonly IMapSE<Day, DayDto> _mapper = mapper;
     private DayDto? dto;
     private readonly List<DayDto> list = [];
     [HttpDelete("{id}")]
@@ -47,7 +47,7 @@ public class DaysController(IRepository<Day> repository, IMapDay mapper) : Contr
     {
         bool result = _repository.EntityExists(dto.ID);
         if (result) return BadRequest();
-        Day? record = _mapper.ToDay(dto);
+        Day? record = _mapper.ToEntity(dto);
         if (record == null) return BadRequest();
         await _repository.PostData(record);
         return Ok();
@@ -55,7 +55,7 @@ public class DaysController(IRepository<Day> repository, IMapDay mapper) : Contr
     [HttpPut("{id}")]
     public async Task<IActionResult> PutRecordAsync(int id, DayDto dto)
     {
-        Day? record = _mapper.ToDay(dto);
+        Day? record = _mapper.ToEntity(dto);
         if (record == null) return BadRequest();
         bool? result = await _repository.PutData(id, record);
         return result switch

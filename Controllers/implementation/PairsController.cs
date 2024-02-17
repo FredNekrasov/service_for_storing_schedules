@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Web_API_for_scheduling.Models.dto;
 using Web_API_for_scheduling.Models.entities;
-using Web_API_for_scheduling.Models.mappers.pair;
+using Web_API_for_scheduling.Models.mappers;
 using Web_API_for_scheduling.Models.repositories;
 
 namespace Web_API_for_scheduling.Controllers.implementation;
 
 [Route("api/[controller]")]
 [ApiController]
-public class PairsController(IRepository<Pair> repository, IMapPair mapper) : ControllerBase, IController<PairDto>
+public class PairsController(IRepository<Pair> repository, IMapSE<Pair, PairDto> mapper) : ControllerBase, IController<PairDto>
 {
     private readonly IRepository<Pair> _repository = repository;
-    private readonly IMapPair _mapper = mapper;
+    private readonly IMapSE<Pair, PairDto> _mapper = mapper;
     private PairDto? dto;
     private readonly List<PairDto> list = [];
     [HttpDelete("{id}")]
@@ -51,7 +51,7 @@ public class PairsController(IRepository<Pair> repository, IMapPair mapper) : Co
     {
         bool result = _repository.EntityExists(dto.PairID);
         if (result) return BadRequest();
-        Pair? record = _mapper.ToPair(dto);
+        Pair? record = _mapper.ToEntity(dto);
         if (record == null) return BadRequest();
         await _repository.PostData(record);
         return Ok();
@@ -59,7 +59,7 @@ public class PairsController(IRepository<Pair> repository, IMapPair mapper) : Co
     [HttpPut("{id}")]
     public async Task<IActionResult> PutRecordAsync(int id, PairDto dto)
     {
-        Pair? record = _mapper.ToPair(dto);
+        Pair? record = _mapper.ToEntity(dto);
         if (record == null) return BadRequest();
         bool? result = await _repository.PutData(id, record);
         return result switch

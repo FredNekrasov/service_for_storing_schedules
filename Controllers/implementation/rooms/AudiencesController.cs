@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Web_API_for_scheduling.Models.dto.rooms;
 using Web_API_for_scheduling.Models.entities.rooms;
-using Web_API_for_scheduling.Models.mappers.audience;
+using Web_API_for_scheduling.Models.mappers;
 using Web_API_for_scheduling.Models.repositories;
 
 namespace Web_API_for_scheduling.Controllers.implementation.rooms;
 
 [Route("api/[controller]")]
 [ApiController]
-public class AudiencesController(IRepository<Audience> repository, IMapAudience mapper) : ControllerBase, IController<AudienceDto>
+public class AudiencesController(IRepository<Audience> repository, IMapSE<Audience, AudienceDto> mapper) : ControllerBase, IController<AudienceDto>
 {
     private readonly IRepository<Audience> _repository = repository;
-    private readonly IMapAudience _mapper = mapper;
+    private readonly IMapSE<Audience, AudienceDto> _mapper = mapper;
     private AudienceDto? dto;
     private readonly List<AudienceDto> list = [];
     [HttpDelete("{id}")]
@@ -51,7 +51,7 @@ public class AudiencesController(IRepository<Audience> repository, IMapAudience 
     {
         bool result = _repository.EntityExists(dto.ID);
         if (result) return BadRequest();
-        Audience? record = await _mapper.ToAudienceAsync(dto);
+        Audience? record = _mapper.ToEntity(dto);
         if (record == null) return BadRequest();
         await _repository.PostData(record);
         return Ok();
@@ -59,7 +59,7 @@ public class AudiencesController(IRepository<Audience> repository, IMapAudience 
     [HttpPut("{id}")]
     public async Task<IActionResult> PutRecordAsync(int id, AudienceDto dto)
     {
-        Audience? record = await _mapper.ToAudienceAsync(dto);
+        Audience? record = _mapper.ToEntity(dto);
         if (record == null) return BadRequest();
         bool? result = await _repository.PutData(id, record);
         return result switch
