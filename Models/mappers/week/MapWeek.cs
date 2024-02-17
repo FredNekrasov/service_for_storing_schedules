@@ -5,7 +5,7 @@ using Web_API_for_scheduling.Models.entities.date;
 
 namespace Web_API_for_scheduling.Models.mappers.week
 {
-    public class MapWeek(TimetableDbContext context, IMapper mapper) : IMapWeek
+    public class MapWeek(TimetableDbContext context, IMapper mapper) : IMapSE<Week, WeekDto>
     {
         private readonly TimetableDbContext _context = context;
         private readonly IMapper _mapper = mapper;
@@ -21,7 +21,7 @@ namespace Web_API_for_scheduling.Models.mappers.week
             };
         }
 
-        public Week? ToWeek(WeekDto dto)
+        public Week? ToEntity(WeekDto dto)
         {
             if (dto.Semester == null) return null;
             if (!_context.Semester.Any(e => e.ID == dto.Semester.ID)) return null;

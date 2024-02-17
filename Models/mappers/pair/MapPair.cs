@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using Web_API_for_scheduling.models;
 using Web_API_for_scheduling.Models.dto;
-using Web_API_for_scheduling.Models.dto.rooms;
 using Web_API_for_scheduling.Models.entities;
 using Web_API_for_scheduling.Models.entities.rooms;
 using Web_API_for_scheduling.Models.mappers.audience;
 
 namespace Web_API_for_scheduling.Models.mappers.pair
 {
-    public class MapPair(TimetableDbContext context, IMapper mapper, IMapAudience mapAudience) : IMapPair
+    public class MapPair(TimetableDbContext context, IMapper mapper, IMapAudience mapAudience) : IMapSE<Pair, PairDto>
     {
         private readonly TimetableDbContext _context = context;
         private readonly IMapper _mapper = mapper;
@@ -33,7 +32,7 @@ namespace Web_API_for_scheduling.Models.mappers.pair
             };
         }
 
-        public Pair? ToPair(PairDto dto)
+        public Pair? ToEntity(PairDto dto)
         {
             if (dto.Group == null) return null;
             if (dto.Teacher == null) return null;

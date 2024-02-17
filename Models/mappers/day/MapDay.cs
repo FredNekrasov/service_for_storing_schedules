@@ -7,11 +7,11 @@ using Web_API_for_scheduling.Models.mappers.week;
 
 namespace Web_API_for_scheduling.Models.mappers.day
 {
-    public class MapDay(TimetableDbContext context, IMapWeek mapWeek) : IMapDay
+    public class MapDay(TimetableDbContext context, IMapWeek mapWeek) : IMapSE<Day, DayDto>
     {
         private readonly TimetableDbContext _context = context;
         private readonly IMapWeek _mapWeek = mapWeek;
-        public Day? ToDay(DayDto dto)
+        public Day? ToEntity(DayDto dto)
         {
             if (dto.Week == null) return null;
 

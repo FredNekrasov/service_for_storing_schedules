@@ -1,19 +1,18 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Web_API_for_scheduling.models;
 using Web_API_for_scheduling.Models.dto.rooms;
 using Web_API_for_scheduling.Models.entities.rooms;
 
 namespace Web_API_for_scheduling.Models.mappers.audience
 {
-    public class MapAudience(TimetableDbContext context, IMapper mapper) : IMapAudience
+    public class MapAudience(TimetableDbContext context, IMapper mapper) : IMapSE<Audience, AudienceDto>
     {
         private readonly TimetableDbContext _context = context;
         private readonly IMapper _mapper = mapper;
-        public async Task<Audience?> ToAudienceAsync(AudienceDto dto)
+        public Audience? ToEntity(AudienceDto dto)
         {
             if (dto.AudienceType == null) return null;
-            if (!await _context.AudienceType.AnyAsync(e => e.ID == dto.AudienceType.ID)) return null;
+            if (!_context.AudienceType.Any(e => e.ID == dto.AudienceType.ID)) return null;
             return new Audience
             {
                 ID = dto.ID,
