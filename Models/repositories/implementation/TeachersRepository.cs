@@ -11,7 +11,8 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
         {
             var teacher = await _context.Teacher.FindAsync(id);
             if (teacher == null) return false;
-            if (await _context.Pair.FirstAsync(i => i.TeacherID == id) != null) return null;
+
+            if (await _context.Pair.FirstOrDefaultAsync(i => i.TeacherID == id) != null) return null;
             _context.Teacher.Remove(teacher);
             await _context.SaveChangesAsync();
             return true;

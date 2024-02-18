@@ -10,7 +10,7 @@ public class SemestersRepository(TimetableDbContext context) : IRepository<Semes
     {
         var semester = await _context.Semester.FindAsync(id);
         if (semester == null) return false;
-        if (await _context.Week.FirstAsync(i => i.SemesterID == id) != null) return null;
+        if (await _context.Week.FirstOrDefaultAsync(i => i.SemesterID == id) != null) return null;
         _context.Semester.Remove(semester);
         await _context.SaveChangesAsync();
         return true;

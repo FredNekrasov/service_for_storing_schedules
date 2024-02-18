@@ -11,7 +11,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation.date
         {
             var week = await _context.Week.FindAsync(id);
             if (week == null) return false;
-            if (await _context.Day.FirstAsync(i => i.WeekID == id) != null) return null;
+            if (await _context.Day.FirstOrDefaultAsync(i => i.WeekID == id) != null) return null;
             _context.Week.Remove(week);
             await _context.SaveChangesAsync();
             return true;

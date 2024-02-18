@@ -11,13 +11,13 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
         {
             var pair = await _context.Pair.FindAsync(id);
             if (pair == null) return false;
-            if (await _context.Day.FirstAsync(i => i.FirstPairID == id) != null) return null;
-            if (await _context.Day.FirstAsync(i => i.SecondPairID == id) != null) return null;
-            if (await _context.Day.FirstAsync(i => i.ThirdPairID == id) != null) return null;
-            if (await _context.Day.FirstAsync(i => i.FourthPairID == id) != null) return null;
-            if (await _context.Day.FirstAsync(i => i.FifthPairID == id) != null) return null;
-            if (await _context.Day.FirstAsync(i => i.SixthPairID == id) != null) return null;
-            if (await _context.Day.FirstAsync(i => i.SeventhPairID == id) != null) return null;
+            if (await _context.Day.FirstOrDefaultAsync(i => i.FirstPairID == id) != null) return null;
+            if (await _context.Day.FirstOrDefaultAsync(i => i.SecondPairID == id) != null) return null;
+            if (await _context.Day.FirstOrDefaultAsync(i => i.ThirdPairID == id) != null) return null;
+            if (await _context.Day.FirstOrDefaultAsync(i => i.FourthPairID == id) != null) return null;
+            if (await _context.Day.FirstOrDefaultAsync(i => i.FifthPairID == id) != null) return null;
+            if (await _context.Day.FirstOrDefaultAsync(i => i.SixthPairID == id) != null) return null;
+            if (await _context.Day.FirstOrDefaultAsync(i => i.SeventhPairID == id) != null) return null;
             _context.Pair.Remove(pair);
             await _context.SaveChangesAsync();
             return true;

@@ -11,7 +11,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation.room
         {
             var audienceType = await _context.AudienceType.FindAsync(id);
             if (audienceType == null) return false;
-            if (await _context.Audience.FirstAsync(i => i.AudienceTypeID == id) != null) return null;
+            if (await _context.Audience.FirstOrDefaultAsync(i => i.AudienceTypeID == id) != null) return null;
             _context.AudienceType.Remove(audienceType);
             await _context.SaveChangesAsync();
             return true;

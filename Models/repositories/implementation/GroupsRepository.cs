@@ -11,7 +11,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
         {
             var squad = await _context.Group.FindAsync(id);
             if (squad == null) return false;
-            if (await _context.Pair.FirstAsync(i => i.GroupID == id) != null) return null;
+            if (await _context.Pair.FirstOrDefaultAsync(i => i.GroupID == id) != null) return null;
             _context.Group.Remove(squad);
             await _context.SaveChangesAsync();
             return true;

@@ -11,7 +11,7 @@ namespace Web_API_for_scheduling.Models.repositories.implementation
         {
             var subject = await _context.Subject.FindAsync(id);
             if (subject == null) return false;
-            if (await _context.Pair.FirstAsync(i => i.SubjectID == id) != null) return null;
+            if (await _context.Pair.FirstOrDefaultAsync(i => i.SubjectID == id) != null) return null;
             _context.Subject.Remove(subject);
             await _context.SaveChangesAsync();
             return true;
