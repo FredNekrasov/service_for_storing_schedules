@@ -14,8 +14,9 @@ namespace API_for_mobile_app.model.mappers.special_entities
         private readonly TimetableDbContext _context = context;
         private readonly IMapper _mapper = mapper;
         private readonly IMapSpecialEntities<AudienceDto, Audience> _mapAudience = mapAudience;
-        public PairDto? ToDTO(Pair entity)
+        public PairDto? ToDTO(Pair? entity)
         {
+            if (entity == null) return null;
             Audience? audience = _context.Audience.Find(entity.AudienceID);
             if (audience == null) return null;
             Group? group = _context.Group.Find(entity.GroupID);

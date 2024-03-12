@@ -18,19 +18,12 @@ namespace API_for_mobile_app.model.mappers.special_entities
             Week? week = _context.Week.Find(entity.WeekID);
             if (week == null) return null;
             Pair? pair1 = _context.Pair.Find(entity.FirstPairID);
-            if (pair1 == null) return null;
             Pair? pair2 = _context.Pair.Find(entity.SecondPairID);
-            if (pair2 == null) return null;
             Pair? pair3 = _context.Pair.Find(entity.ThirdPairID);
-            if (pair3 == null) return null;
             Pair? pair4 = _context.Pair.Find(entity.FourthPairID);
-            if (pair4 == null) return null;
             Pair? pair5 = _context.Pair.Find(entity.FifthPairID);
-            if (pair5 == null) return null;
             Pair? pair6 = _context.Pair.Find(entity.SixthPairID);
-            if (pair6 == null) return null;
             Pair? pair7 = _context.Pair.Find(entity.SeventhPairID);
-            if (pair7 == null) return null;
             return new DayDto
             {
                 ID = entity.ID,
